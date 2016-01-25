@@ -1,0 +1,81 @@
+<?php
+
+include_once("../model/class_sql.php");
+require_once("../global.php");
+
+class Marca{
+	public $id;
+	public $nome;
+	
+
+
+	public function add_marca($nome)
+	{		
+		$this->nome = $nome;		
+	}
+
+	public function add_marca_bd(){
+		$sql = new Sql();
+		$sql->conn_bd();
+		$g = new Glob();
+		$query = "INSERT INTO marca (nome) VALUES ('%s')";
+
+		$result = $g->tratar_query($query, $this->nome); //inserindo no banco de dados
+		
+		$query = "SELECT * FROM marca order by id desc";
+		$result = $g->tratar_query($query); //pegando id da ultima insersão
+		 
+	if($g->tratar_query($query, $this->nome, $this->id_unidade_medida,  $this->id_empresa)){
+					return true; 
+		}else{
+				return false;
+		} 
+	}
+
+
+	 public function atualiza_marca($nome, $id){
+		$sql = new Sql();	
+		$sql->conn_bd();
+		$g = new Glob();
+		$query = "UPDATE marca SET nome = '%s' WHERE id = '%s' ";
+
+		return $g->tratar_query($query, $nome, $id);
+	}
+	
+	public function get_marca_id($id){
+		 $sql = new Sql();
+		 $sql->conn_bd();
+		 $g = new Glob();
+
+		 $query = "SELECT * FROM marca WHERE id= '%s'";
+		 $result = $g->tratar_query($query, $id);
+		 
+		 if(@mysql_num_rows($result) == 0){
+     
+            return false;            
+	     }else{
+
+	     	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+	     	$this->id = $row['id'];
+	     	$this->nome = $row['nome'];          	
+
+	     	return $this;
+	     }
+
+	}
+	public function get_all_marca(){
+		$sql = new Sql();
+		$sql->conn_bd();
+		$aux=0;
+		$query = mysql_query("SELECT * FROM marca");
+
+		while($result = mysql_fetch_array($query)){
+			$return[$aux][0] = $result['id'];
+			$return[$aux][1] = $result['nome'];
+			$aux++;
+		}
+		return $return;
+	}
+}
+	
+ ?>

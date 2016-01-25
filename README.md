@@ -1,2 +1,3 @@
-# sgo
-Sistema de Gerenciamento de Obras
+## Copyright and License
+
+Copyright 2015. Todos os direitos reservados.

@@ -1,0 +1,1 @@
+<img src="../images/logo_laboran.png" width="400px">

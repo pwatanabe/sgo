@@ -1,0 +1,1300 @@
+body{
+	background: url("../../images/shattered.png");
+	font-family: Arial;
+}
+body span, body table tr td span{
+	font-size: 13px;
+}
+
+.table_geral{
+	width: 100%;
+	text-align: center;
+}
+.table_geral a{
+	cursor: pointer;
+}
+.table_geral tr td{
+	border: 1px solid #cdcdcd;
+	padding: 2px;
+}
+.tr-2{
+	background-color:#cdcdcd;
+}
+.tr-1{
+	background-color:#dedede;
+}
+.tr-2:hover, .tr-1:hover{
+	background-color:#cccccc;
+}
+.tr-cabecalho{
+	background-color:#bdbdbd;
+	font-weight: bold;	
+}
+
+.container{
+	background-color:#FAEBD7;
+	width: 80%;
+	height: 80%;
+	margin: 0 auto;
+}
+
+.msg{
+	width:100%;
+	text-align: center;
+	background-color: rgba(255,255,255,0.5);
+	box-shadow: 0px 0px 5px #aaa;
+	padding: 20px 0px 20px 0px;
+	margin-top: 10px;
+	float: left;
+}
+.msg a{
+	text-decoration: none;
+	color: #333;
+}
+
+.icon_excluir{
+	cursor:url(../../images/delete_cursor.png),10px;
+}
+
+
+#table-search{
+	padding: 10 5 10 5;
+	
+	background-color:rgb(230, 245, 235);
+	border: 1px solid#bcbcbc;
+	box-shadow: 0px 5px 3px #9a9a9a;
+	border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#table-search, #table-search input{
+	width:100%;
+}
+
+.body-login{
+	background: url("../../img/intro-bg.jpg");
+	background-size: 100%;
+}
+/*#table_login input{
+	border: 1px solid#ccc;
+}*/
+.avancar,.voltar{
+	width: 90px;
+}
+.avancar{
+	
+	background-image: url("../../images/avancar.png");
+	background-repeat: no-repeat;
+	background-size: 20px;
+	background-position: right;
+}
+.voltar{
+	
+	background-image: url("../../images/voltar.png");
+	background-repeat: no-repeat;
+	background-size: 20px;
+	background-position: left;
+}
+.content{
+	padding: 30px;
+    background-color: rgba(230,230,230, 0.8);
+    width: 500px;
+    /*height: 300px; */
+    margin: 0 auto;
+    margin-top: 7%;
+    box-shadow: 0px 0px 10px #565656;
+    border: 5px solid#fff;
+    border-radius:5px;
+    text-transform: uppercase;
+    text-align: center;
+
+}
+
+.content table{
+	/*padding:20px;*/
+	margin: 0 auto;
+	margin-top: 50px;
+	text-align: center;
+}
+.content table td{
+	text-align: center;
+	padding-top:10px;
+}
+.content table input{
+	height:30px;
+	padding: 3px;
+	border: 0;
+	background-color:rgba(255,255,255,0.5);
+	transition: all 0.5s;
+}
+.content table input:hover{
+	box-shadow: 0px 0px 10px #aaa;
+	background-color:rgba(255,255,255,1);
+	
+}
+.botao_submit{
+	width: 50px;
+	border-radius:5px;
+	cursor: pointer;
+}
+.define-relatorio tr td a{
+	text-decoration: none;
+}
+/********************************* BOX LOGIN ***************************************/
+.box-login{
+	border: 1px solid#ddd;
+	border-radius:3px;
+	float:right;
+	background-color:rgba(255,255,255,0.5);
+	padding:5px;
+	box-shadow: 2px 2px 10px #aaa;	
+}
+
+.nome-box-login{
+	float:left;
+}
+.nome-box-login{
+	font-size:12px;
+}
+.nome-box-login span{
+	color:#aaa;
+	font-size:12px;
+}
+.nome-box-login a{
+	text-decoration: none;
+}
+/********************************* FIM BOX LOGIN*********************************/
+
+
+
+/********************************* MENU *****************************************/
+
+.menu{
+  	background: url("../../images/footer_lodyas.png");
+  	background-size: 200px;
+  	/*box-shadow: 0px 0px 10px #aaa;*/
+	border-radius:1px;	
+}
+.menu .menu-list{
+  list-style: none;
+}
+
+.menu > .menu-list > li{
+  float: left;
+  position: relative;
+/*  border-left: 1px solid#eee;*/
+	border-right: 1px solid#565656;
+}
+.menu > .menu-list > li > a {
+  padding: 10px;
+  /*padding-top: 15px;*/
+  
+}
+.menu > .menu-list > li:hover a {
+  /*background-color:rgba(200,200,200,0.5);*/
+}
+
+/* Remove as bolinhas do lado das listas */
+.menu .menu-list, .menu .sub-menu{
+  list-style: none;
+
+}
+/* Configura todos os links do nosso menu */
+.menu a, .menu a span{
+  color: #eee;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
+  height:15px;
+
+  /*letter-spacing:0.2em;*/
+}
+/* Faz os <li>s ficarem na horizontal */
+.menu > .menu-list > li{
+  float: left;
+  position: relative;
+}
+/* Configura os links do menu principal */
+
+/* Configura o fundo do menu principal quando com mouse hover */
+.menu > .menu-list > li:hover a {
+  background: #222;
+  color:#eee;
+}
+/* Mostra o submenu no evento de mouse hover */
+.menu > .menu-list > li:hover > .sub-menu {
+  display: block;
+
+}
+/* Configura o estilo do submenu */
+.menu > .menu-list > li > .sub-menu {
+  position: absolute;
+  margin-left: -40px;
+  /*background-color:rgba(255,255,255,0.5);*/
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+}
+/* Configura os links do submenu */
+.menu > .menu-list > li > .sub-menu > li > a {
+	padding: 10px 20px;
+	font-size: 11px;
+}
+.menu > .menu-list > li > .sub-menu > li > a:hover {
+	background-color: #333;
+	transition: all 0.3s;
+}
+
+/* Clearfix para o menu */
+.menu:after {
+  content: '.';
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+h2{
+
+	padding-top: 10px;
+	font-size: 30;
+	font-family: times;
+	font-style: black;
+}
+.ad_func table{
+	width: 100%;
+}
+.table_dados_pes{
+	float:left;
+	width:500px;
+}
+.title{
+	font-size:15px;
+}
+.title-box{
+	box-shadow: 2.8px 2.8px 12px #888;
+	width: 100%;
+	background: url("../../images/footer_lodyas.png");
+	background-size: 200px;
+	color: #ddd;
+	padding: 2px 0px 2px 0px;
+	/*margin-left: -10px;*/
+	float:left;
+	border-radius: 5px;
+}
+.formulario table{
+    /*padding:20px;
+	margin: 0 auto;
+	width:100%;
+	margin-top: 10px;*/
+
+}
+.formulario table td{
+	/*text-align: center;*/
+	padding-top:5px;
+
+}
+
+.formulario table input{
+	background-color: rgba(255,255,255,0.7);
+	/*margin-top: 5px;*/
+	/*margin-bottom: 10px;	*/
+	/*text-align: center;*/
+	/*padding: 10px;*/
+	border: 1px solid #bcbcbc;
+	height:25px;
+	/*padding: 3px;*/
+	border: 0;
+	
+	transition: all 0.5s;
+}
+
+.formulario table input:hover{
+	/*box-shadow: 0px 0px 2px #565656;*/
+	background-color:rgba(255,255,255,1);
+	
+}
+.formulario textarea{
+    
+    max-width: 504px;
+}
+.formulario textarea:hover, input:hover{
+	/*box-shadow: 0px 0px 10px #565656;*/
+	background-color:rgba(255,255,255,1);
+	transition: all 0.5s;
+}
+.formulario{
+	/*min-width: 550px;*/
+	transition: all 2s;
+	padding:20px;
+       box-shadow: 0px 0px 10px #aaa;
+	float: left;
+	margin-top: 20px;
+	margin-left: 15px;
+	border: 1px solid#aaa;
+        border-radius: 10px;
+        
+	margin-bottom: 20px;
+	width: 500px;
+    /*min-width:650px;*/
+	text-align: center;
+	background-color: rgba(240, 245, 230, 0.5);	
+}
+.formulario form input, .formulario form select{
+	height: 25px;
+
+	border: 1px solid#bbb;
+	padding-left: 5px;
+	border-radius: 3px;
+}
+.formulario a{
+	text-decoration: none;
+	color: #333;
+}
+.formulario a:hover{
+	color:#000;
+	text-shadow: 0px 0px 1px #000;
+}
+.button{
+	background: url("../../images/footer_lodyas.png");
+	width: 100px;
+	height: 25px;
+	color:#ddd;
+	border: 1px solid#bbb;
+	border-radius: 5px;
+	text-align: center;
+	font-size:16px;
+	box-shadow: 0px 0px 10px #aaa;
+}
+.button:hover{
+	width: 100px;
+	height: 25px;
+	color:#ddd;
+	border: 1px solid#bbb;
+	border-radius: 3px;
+	font-size:16px;
+	cursor:pointer;
+}
+.popup{
+  display:block; clear:both; padding: 10px; position:fixed; width:420px; /*height:280px;*/ margin-left:-600px; float:left;  background-color:#eee; box-shadow: 0px 0px 10px #333; border-radius:10px;
+  transition: all 1s;
+}
+.popup2{
+	     padding: 10px; position:absolute;  z-index: 100; width:450px; margin-top: -800px; height:290px; margin-left:0px; float:left;  background-color:#eee; box-shadow: 0px 0px 10px #000; border-radius:10px;
+	    transition: all 1s;
+}
+.popup-erro{
+	transition: all 1s;
+}
+.back-popup{
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.7);
+	display: none;
+}
+/*********************** BOX-ANIVERSARIANTES && BOX-ATRASOS*********************/
+
+.box-aniversariantes, .box-atrasos{
+	float:left;
+	width: 500px;
+	padding:10px; font-size:12px;
+	box-shadow: 1.5px 1.5px 10px #888;
+	background-color:rgba(255,255,255,0.6);
+	border-radius:5px;
+}
+.table-atrasos{
+	text-align: center;
+	width:100%;
+}
+
+.box-aniversariantes{
+	margin-top: 30px;
+}
+.table-aniversariantes{
+	box-shadow: 1.5px 1.5px 10px #888;
+	background-color:rgba(255,255,255,0.2);
+	text-align:center;
+	width:90%;
+	margin: 0 auto;
+	border-radius: 3px;
+	padding: 10px;
+	margin-top: 10px;
+
+}
+
+
+.table-aniversariantes a{
+	text-decoration: none;
+	color: #22f;
+}
+.button2{
+	background: url("../../images/footer_lodyas.png");
+	width: 500px;
+	height: 35px;
+	color:#ddd;
+	border: 1px solid#bbb;
+	border-radius: 3px;
+	text-align: center;
+	font-size:16px;
+}
+.select{
+	border: 1px solid#black;
+	margin-top: 10px;
+	margin-bottom: 10px;	
+	float:left;
+	width: 100%;
+	height: 35px;
+	font-size:16px;
+	background-color:rgba(250,250,275,0.2);
+}
+.select:hover{
+	box-shadow: 1.5px 1.5px 10px #888;
+	color:black;
+	border-radius: 3px;
+	font-size:16px;
+	cursor:pointer;
+}
+.exibe-pesquisa{
+	width: 100%;
+	border: 1px solid#aaa;
+}
+.exibe-pesquisa tr td{
+	padding-left: 10px;
+}
+.exibe-pesquisa a{
+	text-decoration: none;
+	color: #333;
+	text-align: center;
+}
+
+.exibe-pesquisa a:hover{
+	color: #000;
+	text-shadow: 0px 0px 0.3px #000;
+}
+.table_pesquisa{	
+	box-shadow: 1.8px 1.8px 12px #888;
+	background-color:rgba(255,255,255,0.2);	
+	width:100%;
+	margin: 0 auto;
+	border-radius: 3px;
+	padding: 10px;
+	margin-top: 10px;
+	border: 2px solid#EBCCFF;	
+}
+.table_pesquisa tr{
+	border: 2px solid black;
+	transition: all 0.6s;
+}
+
+.table_pesquisa td{
+	margin-top: 5px;
+	margin-bottom: 10px;	
+	text-align: left;
+	padding: 10px;
+	border: 1px solid #bcbcbc;
+	
+}
+.table-pesquisa td a:hover{
+	color:#000;
+	text-shadow: 0px 0px 1px #000;
+}
+.table-pesquisa td{
+	padding: 0px 3px 0px 3px;
+}
+.table_pesquisa tr:hover{
+
+	transform: scale(1.05);
+	/*transition: all 0.3s;	*/	
+
+	box-shadow: 2.8px 2.8px 12px #888;
+	background-color:rgba(155,155,255,0.2);	
+	width:90%;
+	margin: 0 auto;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 10px;
+	border: 2px solid#EBCCFF;
+}
+
+/*******************************************************************************/
+#table_login{
+	text-align: center;
+	margin-top: 20px;
+}
+/******************************************************************************/
+.add_patrimonio select{
+	border: 1px solid#black;
+	margin-top: 10px;
+	margin-bottom: 10px;	
+	float:left;
+	width: 100%;
+	height: 35px;
+	font-size:16px;
+	background-color:rgba(250,250,275,0.2);
+}
+
+.add_patrimonio table input{
+	background-color: #cecece;	
+	text-align: left;
+	width: 159px;
+	padding-right: 3px;
+	border: 0;
+	
+	transition: all 0.5s;
+}
+.add_patrimonio table input{
+	background-color: #cecece;	
+	text-align: left;
+	width: 159px;
+	padding-right: 3px;
+	border: 0;
+	
+	transition: all 0.5s;
+}
+.add_patrimonio input.uppercase{
+  text-transform: uppercase;
+}
+.add_patrimonio input.seguro{
+	background-color: #cecece;	
+	text-align: left;
+	width: 18px;
+	padding-right: 3px;
+	border: 0;
+}
+.add_patrimonio input.submit{
+	background: url("../../images/footer_lodyas.png");
+	width: 100px;
+	height: 25px;
+	color:#ddd;
+	border: 1px solid#bbb;
+	border-radius: 3px;
+	text-align: center;
+	font-size:16px;
+	box-shadow: 0px 0px 10px #aaa;
+
+}
+.add_patrimonio input.submit:hover{
+	width: 100px;
+	height: 25px;
+	color:#ddd;
+	border: 1px solid#bbb;
+	border-radius: 3px;
+	font-size:16px;
+	cursor:pointer;
+
+}
+#txtRelogio{
+	height: 50px;
+	/*border: 1px solid#bbb;*/
+	width:200px;
+	font-size: 30px;
+	text-align:center;
+
+
+}
+#txtRelogio:hover{
+	background-color:rgba(255,255,255,0);
+}
+.exibe_equipamentos{
+	width:100%;
+	text-align:center;
+}
+.exibe_equipamentos tr td{
+	/*border: 1px solid#000;*/
+	
+	padding: 0px;
+}
+
+.menu_patrimonio form{
+	float: left;
+    margin: 20 10px 0px 50px;
+}
+/********************************* ADD_OBRA**************************************/
+.bloco-1{
+	margin-top:10px;
+	
+	float:left;
+	border: 1px solid#ababab;
+	box-shadow: 0px 0px 3px #aaa;
+	background-color: #dddddd;
+	width: 100%;
+}
+.form-input{
+	float:left;
+	margin-top: 5px;
+	width: 100%;
+
+}
+#form-input-dados{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 300px;
+}
+.form-input input, textarea, select{
+	border-radius: 5px;
+	border: 1px solid#bbb;
+	background-color: #dedede;
+}
+.form-input input:hover{
+	background-color: #dedede;
+}
+.form-input textarea:hover{
+	background-color: #dedede;
+}
+form-input select{
+    background-color: #dedede;
+}
+
+.title-bloco{
+	background-color: rgba(0,100,0,0.5);
+	float:left; width:100%; padding: 0
+}
+.desc-bloco{
+	padding: 10px 0px 10px 0px;
+	float:left;
+	color: #676767;
+	width: 100%;
+	border-bottom: 1px solid#ccc;
+
+}
+
+.body-bloco{
+	text-align:left;
+	float: left;
+	/*padding: 0px 10px 10px 10px;*/
+	/*border: 1px solid;*/
+	width: 100%;
+}
+
+.buttons{
+	width:100%; float:left;
+	margin-top: 10px;
+}
+.situacao{
+	margin-top: 10px;
+	/*background-color: #333;*/
+	width: 100%;
+	height: 7%;
+	float: left;
+	min-height: 40px;
+}
+.situacao-box{
+	float: left;
+	width: 22%;
+	/*border: 1px solid#fff;*/
+	margin-left: 10px;
+	height: 100%;
+	max-height: 50px;
+
+
+	background-color: #eee;
+}
+.left{
+	width:43%;
+	padding: 10px;
+}
+.right{
+	width:43%;
+	padding: 10px;
+}
+.situacao-box div{
+	font-size:90%;
+	margin-top: 5%;
+	
+}
+.seta-direita {
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-left: 10px solid #aaa;
+	float: left;
+}
+.ativo{
+	background-color: rgba(0,100,0,0.5);
+	height: 30px;
+}
+.inativo{
+	background-color: rgba(150,100,0,0.5);
+	height: 30px;
+}
+.ativo-text{
+	padding-top: 5px; 
+}
+.row-table:hover{
+	background-color:rgba(150,150,150,0.8);
+}
+/********************************* FIM ADD_OBRA**********************************/
+
+/********************************* MENU ADD_OBRA ****************************************************/
+.menu_obra{
+	list-style: none;
+}
+.menu_obra li{
+	display: inline;
+	margin-top: -16px;
+	float: left;	
+	padding: 10px;
+	height: 17px;
+	
+}
+
+.ativo a{
+	color: #000;
+	text-shadow: 0px 0px 1px #000;
+}
+/********************************* FIM MENU ADD_OBRA ************************************************/
+
+/********************************* começo pesquisar **********************************/
+.expand{
+	/*height: 50%;
+	background-color: #f00;
+	transition: all 2s;*/
+	display: block;
+}
+.colapse{
+	/*background-color: #0f0;
+	height: 0%;
+	transition: all 0.5s;*/
+	display: none;
+}
+.historico{
+    float:right;
+    clear:right;    
+    margin-top:20px;
+    background-color:rgba(200,200,200,0.5);
+    padding: 10px;
+    border: 1px solid#ababab;
+    box-shadow: 0px 0px 10px #ababab;
+    border-radius: 3px;
+}
+.historico-itens{
+    float:left; 
+    
+    margin-left: 20px;
+    margin-top: 10px;
+    width: 100%; 
+    height: 25px;
+    border-bottom: 1px solid;
+    border-color: #cfcbcb;
+    transition-duration: 0.5s;
+    
+}
+.historico-itens:hover{
+    transform: scale(1.02);
+    font-size: 20px;
+	/*transition: all 0.3s;	*/	
+        
+	box-shadow: 2.8px 2.8px 12px #888;
+	background-color:rgba(155,155,255,0.2);	
+	width:93%;
+	margin-left: 15px;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 10px;
+	border: 2px solid#EBCCFF;
+}
+/********************************* FIM PESQUISAR PESQUISAR_FUNC**********************************/
+
+
+
+
+/********************************* UNIDADE DE MEDIDA**********************************/
+
+.opcoes-unidade-medida{
+        
+        width: 100%;
+        float: left;
+        
+}
+.nova_unidade{
+        
+        width: 48%;
+        float: left;
+        padding-bottom:  20px;
+        margin-top:20px;
+}
+.editar_unidade{
+        
+        width: 48%;
+        float: left;
+        padding-bottom:  20px;
+        margin-top:20px;
+}
+/*.ocultar-opcoes-unidade{
+        margin-left: 40px;
+        
+}*/
+.atributos-novo{
+        float:left;
+       
+}
+
+
+.atributos-novo span{
+        padding-top: 5px;
+        width: 80px;
+        float:left;
+}
+/* Let's get this party started */
+
+
+.master{
+    
+    box-shadow: 2px 2px 3px #666; clear:left; width: 100%; transition-delay: 1s;  height: 180px; overflow: scroll; overflow-x: hidden; border-bottom: solid 1px; border-bottom-color: #bcbcbc;    
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 3px;
+     border-radius: 3px;
+} 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 3px;
+    background: rgba(205,205,205,0.8); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(205,205,205,0.2); 
+}
+
+.tabela-unidades{
+    
+    margin-top: -5px;
+    margin-bottom: 15px;
+    float:left; 
+    width:100%;
+}
+.titulo{    
+    float:left; padding-right: 10px; width:30%;
+    font-weight: bolder; 
+}
+.tabela-unidades-nome{
+    float:left; text-align: center; padding-right: 10px; width: 30%; background-color: #ddd; border: solid 1px;    
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.tabela-unidades-grandeza{
+    
+    float:left; text-align: center; padding-right: 10px; width: 30%; margin-left: 30px; background-color: #ddd; border:0;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.tabela-unidades-sigla{
+    float:left; text-align: center; width: 8%; margin-left: 48px; background-color: #ddd;    
+     -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;    
+}
+.button-tabela-unidade-salvar{
+    float:right; margin-left: 1px; margin-right: 1px; background: none; background-image: url('../../images/apply.png'); width: 26px; background-repeat: no-repeat;    
+     -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.button-tabela-unidade-deletar{
+     float:right; background: none;  background-image: url('../../images/revoke.png'); width: 26px; background-repeat: no-repeat;   
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.box-titulo{
+    box-shadow: 3px 3px 3px #9a9a9a; margin-top: 20px; float:left; border-radius: 5px; padding-top: 8px; width:100%; background-color: #00ba65; height: 25px; 
+}
+
+/********************************* FIM UNIDADE DE MEDIDA**********************************/
+/******************************** MATERIAIS POR REGIAO ***********************************/
+.menu-materiais{
+   box-shadow: 3px 3px 3px #9a9a9a; margin-top: 20px; float:left; border-radius: 5px; padding-top: 8px; width:100%; background-color: #00ba65; height: 25px; position: relative;
+}
+.menu-materiais span{
+    float:left;
+    text-align: left;
+    width: 19%;
+    margin-left: 2px;
+
+}
+.adicionando-valores{
+    width: 100%;
+    clear:left;
+    float: left;    
+}
+.opcoes-materiais{        
+        width: 100%;
+        float: left; 
+        background-color: #bbb;
+}
+.add-valor-material{        
+        width: 48%;
+        float: left;
+        padding-bottom:  20px;
+        margin-top:20px;
+}
+.materiais{
+    
+    margin-top: 10px;
+    width: 100%;
+    clear: left;
+    float: left;
+}
+.materiais span{
+    float:left;
+    font-weight: bolder;
+    }
+.materiais input{
+    float:left; text-align: center; padding-right: 10px; width: 30%; background-color: #ddd; border: solid 1px;    
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.materiais select{
+    float:left; text-align: center; padding-right: 10px; width: 30%; background-color: #ddd; 
+    margin-left: 20px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 10px;
+    border-radius: 5px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.button-tabela-material-deletar{
+   
+    float:right;  margin-top: 10px; background-position: center;  background-image: url('../../images/revoke.png'); width: 60px; background-repeat: no-repeat;    
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.button-tabela-material-salvar{
+    float:right;  margin-top: 10px; background-position: center;  background-image: url('../../images/apply.png'); width: 60px; background-repeat: no-repeat;    
+     -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    outline: 0;
+    -webkit-appearance: none;
+}
+
+.master-materiais{
+    box-shadow: 2px 2px 3px #666; clear:left; width: 100%; transition-delay: 1s;  height: 240px; overflow: scroll; overflow-x: hidden; border-bottom: solid 1px; border-bottom-color: #bcbcbc;
+}
+.material-valor-regioes{
+    width: 100%;
+    float: left;
+
+}
+.material-valor-regioes span{
+    text-align: left;
+    float: left;
+    width: 200px;
+    padding: 5px;
+    
+}
+/******************************** FIM MATERIAIS POR REGIAO ***********************************/
+
+/*************************************** INI PONTO ********************************************/
+
+.content-right{
+	
+	/*background-color:#ccc;*/
+	float:left;
+	/*padding:10px;*/
+	text-align: justify;
+	margin-top: 20px;
+    margin-left: 15px;
+    /*width: 550px;*/
+	
+}
+
+.table-aniversariantes{
+	text-align:center;
+       
+	width:100%;
+}
+/*************************************** FIM PONTO ********************************************/
+
+/************************* Configuração pagina de inicio ********************/
+
+.cabecalho{
+
+	
+	background: url("../../images/grey_wash_wall_@2X.png");
+	
+	background-size: 200px;
+	
+	 font:message-box;
+	margin-top: 4px;
+	/*margin-left: -10px;*/
+	float:left;
+	margin-left:5px; 
+	float:left;
+	width:100%
+
+}
+.painel-controle{
+	float:left; 
+	margin-top:20px;
+	width:30%;
+	padding: 10px;
+	padding-left: 2%;
+
+}
+
+.colum{
+	float:left; 
+	background-color: rgba(255, 255, 255,0.8);
+	border: 1px solid;
+	border-color: #ababab;
+	/*border-top-right-radius:80px;*/
+	/*border-top-left-radius:30px;	*/
+	width: 85%;
+	box-shadow:   0px 0px 10px #333; 
+	}
+
+
+ 
+ .descricao{
+ 	border-bottom-style: solid;
+   	border-color: #003300;
+        border-bottom-width: 1px; 	
+ 	width:100%; 
+ 	padding-top: 10px;
+ 	padding-bottom: 10px; 
+ 	float:left;
+ }
+.descricao span{
+	float:left;
+	padding-left: 10px;
+	
+}
+.descricao textarea{	
+	border-radius:10px;
+	margin-top: 10px;
+	float:left;
+	
+	width: 100%;
+	height: 10%;	
+	transition: all 2s;
+	border:0;
+	}
+
+.msg-descricao{
+	width:100%; 
+	float:left;
+	padding-top: 15px;
+}
+
+.colum-funcionario{
+	clear: left;  float:left; margin:2px; margin-left: 10px;
+	border-bottom-style: solid;
+    border-bottom-color: #ababab;
+    border-bottom-width: 1px;
+
+}
+
+.colum-funcionario input{
+	float:left;
+	background-color: rgba(100,100,100,0.0);
+	border:0;	
+}
+.colum-funcionario a#patrimonio{
+	margin-top: -20px;float:right;
+}
+.popup-painel{
+  display:block; clear:both;
+  padding: 10px; position:fixed; 
+  width:370px; height:280px; 
+  margin-left:-450px; 
+  float:left;  
+  background-color: rgba(255, 255, 255,0.8);
+  border: 1px solid;
+  border-color: #ababab;
+  box-shadow: 0px 0px 10px #333; 
+  border-radius:10px;
+  transition: all 1s;
+}
+
+/******************************************************/
+
+/********************************* CONFIGURAÇÕES ******************************************/
+
+.configuracoes{
+    float: left;
+    margin: 20px;
+    border: solid 1px;
+    
+}
+
+.separador{
+    float:left; width: 100%; margin-top:20px; padding-top: 5px; padding-bottom: 5px; text-align: center; background:url(../../images/footer_lodyas.png); 
+}
+.input-config{
+	background-color:#ddd;
+	width: 50px;
+	box-shadow: 2px 2px 3px #666;
+}
+
+.pop{
+	width:200px;
+	border-radius: 5px;
+	/*height:100px;*/
+	color:#333;
+	border:1px solid #aaa;
+	box-shadow: 2px 2px 5px #aaa;
+	position:absolute;
+	background-color:rgba(255,255,255,0.9);
+	padding: 5px;
+	font-size:12px;
+}
+.title-info-config{
+	background-color:#b2b2b2; 
+	text-align:center
+}
+.content-info{
+	margin-top: 5px;
+	text-align: justify;
+}
+
+.upload-logo{
+    float:left;
+}
+
+/********************************* FIM CONFIGURAÇÕES ******************************/
+.cont{
+	margin-left: 5px; position:absolute; color:#f33;font-size:15px;  text-align:left;
+}
+
+/********************************* ADD COTNAS  ******************************/
+
+.tabela-contas-apagar{
+    float: left;
+    width: 100%;  
+}
+.center{
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;   
+    float:left;
+}
+.row{    
+    width: 100%;    
+}
+.col-1{
+    
+    float:left;
+    width: 10%;
+    word-wrap: break-word;    
+}
+
+.item{
+    float:left;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.col-2{
+    
+    
+    float:left;
+    width: 20%;
+   word-wrap: break-word;
+}
+.col-3{
+    
+     float:left;
+    width: 30%;
+    word-wrap: break-word;
+}
+.col-4{
+    
+    float:left;
+    width: 40%;
+   word-wrap: break-word;
+    }
+.col-5{
+   
+    float:left;
+    width: 50%;
+     word-wrap: break-word; 
+}
+.col-6{
+   
+    float:left;
+    width: 60%;
+    word-wrap: break-word;
+}
+.col-7{
+     
+    float:left;
+    width: 70%;
+   word-wrap: break-word;
+}
+.col-8{
+   
+    float:left;
+    width: 80%;
+   word-wrap: break-word;
+}
+.col-9{
+    
+    float:left;
+    width: 90%;
+  word-wrap: break-word;
+  
+}
+.col-10{
+    
+    float:left;
+    width: 100%;   
+    word-wrap: break-word;
+}
+
+/********************************* FIM CONTAS ******************************/
+
