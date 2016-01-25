@@ -1,7 +1,7 @@
 
 <?php
 include("restrito.php");
-
+  
 include_once("../model/class_funcionario_bd.php");
 include_once("../model/class_horarios_bd.php");
 include_once("../model/class_turno_bd.php");
