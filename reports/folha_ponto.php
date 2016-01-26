@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if(!isset($_SESSION['logado']) && isset($_SESSION['logado']) && $_SESSION['logado'] == md5($_SESSION["id"])){
@@ -32,9 +31,9 @@ include_once("../model/class_sql.php");
 							 
 							
 							 if(isset($_GET['rel']) && $_GET['rel'] == 'funcionario'){
-
-							 		$meses_qtd = date("m")-1;
-							 		for($i=0; $i<$meses_qtd; $i++){
+							 		$meses = array();
+							 		$meses_qtd = 12;
+							 		for($i=0; $i <= $meses_qtd; $i++){
 							 			switch($i){
 							 				case 0:
 							 					$meses[$i] = "Janeiro";

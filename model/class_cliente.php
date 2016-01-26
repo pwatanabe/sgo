@@ -351,26 +351,26 @@ class Cliente {
 		 return $return;
 	}
     
- //    public function get_cli_by_id($id){
-	// 	 $sql = new Sql();
-	// 	 $sql->conn_bd();
-	// 	 $g = new Glob();
+    public function get_cli_by_id($id){
+		 $sql = new Sql();
+		 $sql->conn_bd();
+		 $g = new Glob();
 
-	// 	 $query = "SELECT * FROM clientes where id = '%s' && fornecedor = 1 && id_empresa = ".$_SESSION['id_empresa']."" ;
-	// 	 $result = $g->tratar_query($query, $id);
+		 $query = "SELECT * FROM clientes where id = '%s' && fornecedor = 1 && id_empresa = ".$_SESSION['id_empresa']."" ;
+		 $result = $g->tratar_query($query, $id);
 		 
-	// 	 if(@mysql_num_rows($result) == 0){
+		 if(@mysql_num_rows($result) == 0){
      
- //            return false;            
-	//      }else{
+            return false;            
+	     }else{
 
-	//      	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-	//      	$this->id = $row['id'];
-	//      	$this->nome_fornecedor = $row['nome_razao_soc'];	     	
-	//      	return $this;
-	//      }
+	     	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+	     	$this->id = $row['id'];
+	     	$this->nome_fornecedor = $row['nome_razao_soc'];	     	
+	     	return $this;
+	     }
 
-	// }    
+	}    
         public function get_name_by_id($id){
         	$sql = new Sql();
 			$sql->conn_bd();

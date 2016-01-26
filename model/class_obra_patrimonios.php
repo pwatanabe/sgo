@@ -15,26 +15,26 @@ class Obra_patrimonios{
 		$listVeiculos = array();
 		$listMaquinarios = array();
 		$lista = array();
+		if(isset($_SESSION['obra']['patrimonio']))
+			for($aux = 0; $aux < count($_SESSION['obra']['patrimonio']); $aux++){
+				$tipo_id_qtd = explode(':', $_SESSION['obra']['patrimonio'][$aux]);
+				if($tipo_id_qtd[0] == 0){
+					// $listPatrimonioGeral[] = Obra_patrimoniogerais::add_patrimoniogeral($id_obra, $tipo_id_qtd[1]);
+	               	$patrimonioGeral = Obra_patrimoniogerais::add_patrimoniogeral($id_obra, $tipo_id_qtd[1], $tipo_id_qtd[2]);
+	               	echo '<br />patrimonioGeral: '.$patrimonioGeral->add_patrimoniogeral_bd();
+	               //patrimonio geral
+	            }else if($tipo_id_qtd[0] == 1){
+					// $listMaquinarios[] = Obra_maquinarios::add_maquinarios($id_obra, $tipo_id_qtd[1]);
+					$maquinario = Obra_maquinarios::add_maquinarios($id_obra, $tipo_id_qtd[1]);
+					echo '<br />maquinario: '.$maquinario->add_maquinario_bd();
+	            }else{
+	            	// $listVeiculos[] = Obra_veiculos::add_veiculo($id_obra, $tipo_id_qtd[1]);
+	            	$veiculo = Obra_veiculos::add_veiculo($id_obra, $tipo_id_qtd[1]);
+	            	echo '<br />veiculo: '.$veiculo->add_veiculo_bd();
+	               //Veiculo
+	            }
 
-		for($aux = 0; $aux < count($_SESSION['obra']['patrimonio']); $aux++){
-			$tipo_id_qtd = explode(':', $_SESSION['obra']['patrimonio'][$aux]);
-			if($tipo_id_qtd[0] == 0){
-				// $listPatrimonioGeral[] = Obra_patrimoniogerais::add_patrimoniogeral($id_obra, $tipo_id_qtd[1]);
-               	$patrimonioGeral = Obra_patrimoniogerais::add_patrimoniogeral($id_obra, $tipo_id_qtd[1], $tipo_id_qtd[2]);
-               	echo '<br />patrimonioGeral: '.$patrimonioGeral->add_patrimoniogeral_bd();
-               //patrimonio geral
-            }else if($tipo_id_qtd[0] == 1){
-				// $listMaquinarios[] = Obra_maquinarios::add_maquinarios($id_obra, $tipo_id_qtd[1]);
-				$maquinario = Obra_maquinarios::add_maquinarios($id_obra, $tipo_id_qtd[1]);
-				echo '<br />maquinario: '.$maquinario->add_maquinario_bd();
-            }else{
-            	// $listVeiculos[] = Obra_veiculos::add_veiculo($id_obra, $tipo_id_qtd[1]);
-            	$veiculo = Obra_veiculos::add_veiculo($id_obra, $tipo_id_qtd[1]);
-            	echo '<br />veiculo: '.$veiculo->add_veiculo_bd();
-               //Veiculo
-            }
-
-		}
+			}
 
 		(count($listPatrimonioGeral) > 0) ? $lista[] = $listPatrimonioGeral : null;
 		(count($listMaquinarios) > 0) ? $lista[] = $listMaquinarios : null;

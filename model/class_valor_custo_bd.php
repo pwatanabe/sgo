@@ -77,7 +77,7 @@ class Valor_custo{
 	     	$row = mysql_fetch_array($result, MYSQL_ASSOC);
 	     	$valor_custo->id = $row['id'];
 	     	$valor_custo->valor = $row['valor'];  
-                $valor_custo->id_tipo_custo = $row['id_tipo_custo'];
+            $valor_custo->id_tipo_custo = $row['id_tipo_custo'];
 
 	     	return $valor_custo;
 	     }
