@@ -191,7 +191,7 @@ function verificaValor($valor){
                         
                         if($key != "quantidade" && $key != "tipo" && $key != "button" ){ /* Comando para não ajudar o array sem entrtar quantidade tipo e button**/
                          
-                         $data = explode(":",$key);
+                          $data = explode(":",$key);
                                                     
                           if($data[1] == "nome"){
                               
@@ -200,11 +200,11 @@ function verificaValor($valor){
                           }
                            if($data[1] == "medida"){
                                $medida = $value;
-                             $i++;
+                              $i++;
                           }
                            if($data[1] == "empresa"){                              
-                               $empresa = $value."<br>";
-                              $i++;
+                               $empresa = $_SESSION['id_empresa'];
+                               $i++;
                           }
                           if($i == 3){                                                                  /*condição de adição, quando naa estiver vazio*/
                               if($nome != "" && $medida != "no_sel" && $empresa != "no_sel"){

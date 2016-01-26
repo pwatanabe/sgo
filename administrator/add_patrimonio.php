@@ -106,8 +106,7 @@ return $valor; //retorna o valor formatado para gravar no banco
                        $id_responsavel = $_POST['responsavel'];
                        $observacao = $_POST['observacao'];
                        
-                       echo "<script>alert(".$valor.")</script>";
-                       echo "<script>alert(".$id_valor_custo.")</script>";
+                      
                       $maquinario = new Maquinario();
                       $maquinario->add_maquinario($matricula, $chassi_nserie, $modelo, $tipo_consumo, $ano, $cor, $fabricante, $data_compra, $seguro, $data_ini_seg, $data_fim_seg, $horimetro_inicial, $id_empresa, $id_fornecedor, $id_responsavel, $observacao, $valor, $id_valor_custo);
     
@@ -695,7 +694,7 @@ return $valor; //retorna o valor formatado para gravar no banco
                   <tr><td><span>Matricula:</span></td> <td><input class="uppercase" type="text" name="matricula" id="matricula"></td></tr>                               
                   <tr><td><span>Nome:</span></td><td><input type="text" name="nome" id="nome"><td><span> Marca:</span></td><td><input type="text" name="marca" id="marca"></td></td></tr>
                   <tr><td><span>Quantidade:</span></td><td><input type="numeric" name="quantidade" id="quantidade"> <td><span> Descricao:</span></td><td><input type="text" name="descricao" id="descricao"></td></td></tr>
-                  <tr><td><span>Valor:</span></td><td><input onkeyup="mascara(this, mvalor);" type="numeric" name="valor" id="valor"></td><td></tr>
+                  <tr><td><span>Valor Unitário:</span></td><td><input onkeyup="mascara(this, mvalor);" type="numeric" name="valor" id="valor"></td><td></tr>
                    <tr><td><span>Valor de custo:</span></td><td><input onkeyup="mascara(this, mvalor);" type="valor_custo" name="valor_custo" id="valor"></td</tr>
                     <td><span>Tipo do custo:</span></td><td><select style="width: 50%; margin-left: 5px;" name="tipo_custo" id="tipo_custo">
                                         <?php
@@ -1060,7 +1059,7 @@ return $valor; //retorna o valor formatado para gravar no banco
                   <tr><td><span>Matricula:</span></td> <td><input class="uppercase" value="<?php echo $patrimonio_geral->matricula ?>" type="text" name="matricula" id="matricula"></td></tr>                               
                   <tr><td><span>Nome:</span></td><td><input type="text" name="nome" id="nome" value="<?php echo $patrimonio_geral->nome ?>"><td><span> Marca:</span></td><td><input type="text" name="marca" id="marca"value="<?php echo $patrimonio_geral->marca ?>"></td></td></tr>
                   <tr><td><span>Quantidade:</span></td><td><input type="text" name="quantidade" id="quantidade" value="<?php echo $patrimonio_geral->quantidade ?>"> <td><span> Descricao:</span></td><td><input type="text" name="descricao" id="descricao" value="<?php echo $patrimonio_geral->descricao?>"></td></td></tr>
-                  <tr><td><span>Valor:</span></td><td><input type="numeric" name="valor" onkeyup="mascara(this, mvalor);" id="valor" value="<?php echo 'R$' . number_format($patrimonio_geral->valor, 2, ',', '.'); ?>"></td><td></tr>
+                  <tr><td><span>Valor Unitário:</span></td><td><input type="numeric" name="valor" onkeyup="mascara(this, mvalor);" id="valor" value="<?php echo 'R$' . number_format($patrimonio_geral->valor, 2, ',', '.'); ?>"></td><td></tr>
                   
                   <tr><td><span>Valor de Custo:</span></td> <td><input type="text" onkeyup="mascara(this, mvalor);"name="valor_custo" id="valor_custo" value="<?php echo  'R$' . number_format($valor_custo->valor, 2, ',', '.') ?>"></td>
                                   <td>

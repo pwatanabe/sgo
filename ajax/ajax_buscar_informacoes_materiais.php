@@ -14,7 +14,6 @@ include_once("../model/class_material_bd.php");
 	  $arrMaterial[$i][0] = $material[$i][0];
 	  $arrMaterial[$i][1] = $material[$i][1];
 	  $arrMaterial[$i][2] = $material[$i][2];
-	 
 	}
 ?>
 

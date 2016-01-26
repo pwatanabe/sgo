@@ -829,13 +829,13 @@ class Funcionario{
         $valor = str_replace($source, $replace, $get_valor); //remove os pontos e substitui a virgula pelo ponto
         
         return $valor; //retorna o valor formatado para gravar no banco
-        }
+    }
 
 	public function printFunc(){
         $empresa = new Empresa();
         $empresa->get_empresa_by_id($this->id_empresa);
         $valor_custo = new Valor_custo();
-        $valor_custo->get_valor_custo_id($this->id_valor_custo);
+        $valor_custo = $valor_custo->get_valor_custo_id($this->id_valor_custo);
         $vlr = $this->verificaValor($valor_custo->valor);        
         if($vlr == ""){$vlr = 0.0;}
         $sal = $this->verificaValor($this->salario_base);
@@ -891,9 +891,9 @@ class Funcionario{
 		$texto .= "</tr>";
 		if(count($epi_func)>0){
 			$texto .= '<tr> <td colspan="5"><span><b>Equipamentos do funcionário:</b></span></td></tr>';
-			$texto .= '<tr> <td><span>ID</span></td> <td><span>Nome</span></td> <td><span>Data da entrega</span></td><td><span>Quantidade</span></td></tr>';
+			$texto .= '<tr> <td><span>ID</span></td> <td colspan="2"><span>Nome</span></td> <td><span>Data da entrega</span></td><td><span>Quantidade</span></td></tr>';
                       foreach ($epi_func as $key => $value) {
-                       $texto .= '<tr><td><span>'.$epi_func[$key]->id.'</span></td><td><span>'.$epi_func[$key]->nome_epi.'</span></td><td><span>'.$epi_func[$key]->data_entrega.'</span></td><td><span>'.$epi_func[$key]->quantidade.'</span></td></tr>';
+                       $texto .= '<tr><td><span>'.$epi_func[$key]->id.'</span></td><td colspan="2"><span>'.$epi_func[$key]->nome_epi.'</span></td><td><span>'.$epi_func[$key]->data_entrega.'</span></td><td><span>'.$epi_func[$key]->quantidade.'</span></td></tr>';
                       } 
 		}
                 

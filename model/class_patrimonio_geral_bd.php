@@ -1,5 +1,4 @@
 <?php
-
 include_once("../model/class_sql.php");
 require_once("../global.php");
 
@@ -51,7 +50,7 @@ class Patrimonio_geral{
 		$sql->conn_bd();
 		$g = new Glob();
 		$aux=0;
-		$query = "SELECT * FROM patrimonio_geral WHERE nome LIKE '%%%s%%' &&  oculto = 0";
+		$query = "SELECT * FROM patrimonio_geral WHERE nome LIKE '%%%s%%' && id_empresa = '".$_SESSION['id_empresa']."' &&  oculto = 0";
 		$query_tra = $g->tratar_query($query, $name);
 
 		while($result =  mysql_fetch_array($query_tra)){
@@ -59,7 +58,7 @@ class Patrimonio_geral{
 			$return[$aux][1] = $result['nome'];
 			$return[$aux][2] = $result['descricao'];
 			$return[$aux][3] = $result['controle'];
-                        $return[$aux][4] = $result['matricula'];
+            $return[$aux][4] = $result['matricula'];
                         
 			$aux++;
 		}

@@ -66,18 +66,17 @@ class Valor_custo{
 		 $sql->conn_bd();
 		 $g = new Glob();
 
-		 $query = "SELECT * FROM valor_custo WHERE id= '%s'";
+		 $query = "SELECT * FROM valor_custo WHERE id = '%s'";
 		 $result = $g->tratar_query($query, $id);
 		 
 		 if(@mysql_num_rows($result) == 0){
-     
             return false;            
 	     }else{
 	     	$valor_custo = new Valor_custo();
 	     	$row = mysql_fetch_array($result, MYSQL_ASSOC);
 	     	$valor_custo->id = $row['id'];
 	     	$valor_custo->valor = $row['valor'];  
-                $valor_custo->id_tipo_custo = $row['id_tipo_custo'];
+            $valor_custo->id_tipo_custo = $row['id_tipo_custo'];
 
 	     	return $valor_custo;
 	     }

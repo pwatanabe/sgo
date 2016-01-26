@@ -217,7 +217,7 @@
                                   
                                 $nome_turno_funcionario = $funcionario->get_nome_by_id($array[$aux][2]);
                                 $turno = $turno->getTurnoById($nome_turno_funcionario[1]);
-                                
+                                date_default_timezone_set('America/Sao_Paulo');
                                 $hora = strtotime(date('H:i:s'));
                                 $hora_turno['ini_exp'] = strtotime($turno->ini_exp)+$TEMP_LIMIT_ATRASO*60;
                                 $hora_turno['ini_alm'] = strtotime($turno->ini_alm)+$TEMP_LIMIT_ATRASO*60;

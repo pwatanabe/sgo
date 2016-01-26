@@ -19,7 +19,7 @@
              echo "<script>window.location='principal';</script>";
   
       }
-
+  
       if(isset($_GET['id_horario']) && $_GET['id_horario'] != ""){
           $horario = new Horarios();
           $horario = $horario->get_horario_by_id($_GET['id_horario'] );
