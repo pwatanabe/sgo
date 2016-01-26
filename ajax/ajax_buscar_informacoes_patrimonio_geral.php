@@ -12,12 +12,12 @@ include_once("../model/class_patrimonio_geral_bd.php");
                 echo '<div class="msg">Nenhum patrimonio encontrado!</div>';
                 return;
 	}
-	// for ($i = 0; $i < count($patrimonio_geral); $i++) {
-	//   $patrimonio_geral[$i][0] = $patrimonio_geral[$i][0];
-	//   $patrimonio_geral[$i][1] = $patrimonio_geral[$i][1];
-	//   $patrimonio_geral[$i][2] = $patrimonio_geral[$i][2];
-	//   $patrimonio_geral[$i][3] = $patrimonio_geral[$i][3];
-	// }
+	for ($i = 0; $i < count($patrimonio_geral); $i++) {
+	  $arrPatrimonio_geral[$i][0] = $patrimonio_geral[$i][0];
+	  $arrPatrimonio_geral[$i][1] = $patrimonio_geral[$i][1];
+	  $arrPatrimonio_geral[$i][2] = $patrimonio_geral[$i][2];
+	  $arrPatrimonio_geral[$i][3] = $patrimonio_geral[$i][3];
+	}
 ?>
 
 <?php if(isset($_GET['param']) && $_GET['param'] == 0){ // EDITAR FUNCIONARIO?>
@@ -33,8 +33,8 @@ include_once("../model/class_patrimonio_geral_bd.php");
 		  	$cont=0;
                        
 		  	if($patrimonio_geral) 
-			    foreach($patrimonio_geral as $value => $nome){
-			      echo "<tr><td style='padding-left:20px;'><a href='add_patrimonio.php?tipo=editar&controle=0&id=".$patrimonio_geral[$value][0]."'>".$patrimonio_geral[$value][4]." - ".$patrimonio_geral[$value][1]."</a></td></tr>";
+			    foreach($arrPatrimonio_geral as $value => $nome){
+			      echo "<tr><td style='padding-left:20px;'><a href='add_patrimonio.php?tipo=editar&controle=0&id=".$arrPatrimonio_geral[$value][0]."'>".$arrPatrimonio_geral[$value][1]." ".$arrPatrimonio_geral[$value][2]." ".$arrPatrimonio_geral[$value][3]."</a></td></tr>";
 			     	$cont++;
 			  	}
 			  	  echo '<tr><td style="padding-left:20px; font-size: 12px; color:#777;">'.$cont. " registro(s) encontrado(s)</td></tr>";
@@ -54,8 +54,8 @@ include_once("../model/class_patrimonio_geral_bd.php");
 		  <?php
 		  	$cont=0;
 		  	if($patrimonio_geral) 
-			    foreach($patrimonio_geral as $value => $nome){
-			      echo "<tr><td style='padding-left:20px;'><a class='icon_excluir' title='Clique para excluir' onclick='confirma0(".'"'.$patrimonio_geral[$value][0].'"'.",".'"'.$patrimonio_geral[$value][2].'"'.")'>".$patrimonio_geral[$value][1]."  ".$patrimonio_geral[$value][2]."</a></td></tr>";
+			    foreach($arrPatrimonio_geral as $value => $nome){
+			      echo "<tr><td style='padding-left:20px;'><a class='icon_excluir' title='Clique para excluir' onclick='confirma0(".'"'.$arrPatrimonio_geral[$value][0].'"'.",".'"'.$arrPatrimonio_geral[$value][2].'"'.")'>".$arrPatrimonio_geral[$value][1]."  ".$arrPatrimonio_geral[$value][2]."</a></td></tr>";
 			     	$cont++;
 			  	}
 			  	echo '<tr><td style="padding-left:20px; font-size: 12px; color:#777;">'.$cont. " registro(s) encontrado(s)</td></tr>";

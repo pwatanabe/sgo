@@ -351,26 +351,26 @@ class Cliente {
 		 return $return;
 	}
     
-    public function get_cli_by_id($id){
-		 $sql = new Sql();
-		 $sql->conn_bd();
-		 $g = new Glob();
+ //    public function get_cli_by_id($id){
+	// 	 $sql = new Sql();
+	// 	 $sql->conn_bd();
+	// 	 $g = new Glob();
 
-		 $query = "SELECT * FROM clientes where id = '%s' && fornecedor = 1 && id_empresa = ".$_SESSION['id_empresa']."" ;
-		 $result = $g->tratar_query($query, $id);
+	// 	 $query = "SELECT * FROM clientes where id = '%s' && fornecedor = 1 && id_empresa = ".$_SESSION['id_empresa']."" ;
+	// 	 $result = $g->tratar_query($query, $id);
 		 
-		 if(@mysql_num_rows($result) == 0){
+	// 	 if(@mysql_num_rows($result) == 0){
      
-            return false;            
-	     }else{
+ //            return false;            
+	//      }else{
 
-	     	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-	     	$this->id = $row['id'];
-	     	$this->nome_fornecedor = $row['nome_razao_soc'];	     	
-	     	return $this;
-	     }
+	//      	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+	//      	$this->id = $row['id'];
+	//      	$this->nome_fornecedor = $row['nome_razao_soc'];	     	
+	//      	return $this;
+	//      }
 
-	}    
+	// }    
         public function get_name_by_id($id){
         	$sql = new Sql();
 			$sql->conn_bd();
@@ -467,13 +467,10 @@ class Cliente {
 		$texto .= "</tr>";		
 		if($this->fornecedor == 0){
 			echo "";
-		}else if ($this->fornecedor==1){
-
+		}elseif ($this->fornecedor==1){
 			$texto .= "<tr>";
-			$texto .= "<td><span><b>Forncedor: </b></span></td><td><span>";
-			$texto .= ($this->fornecedor == 1) ? 'Sim' : 'Não';
-			$texto .= "</span></td>";	
-			$texto .= "</tr>";	
+		$texto .= "<td><span><b>Forncedor: </b></span></td><td><span>".$this->fornecedor."</span></td>";	
+		$texto .= "</tr>";	
 		}									
 		$texto .= "</table>";
 	
@@ -548,7 +545,7 @@ class Cliente {
 			echo "";
 		}elseif ($this->fornecedor==1){
 			$texto .= "<tr>";
-		$texto .= "<td><span><b>Fornecedor </b></span></td><td><span>".($this->fornecedor == 1)? print 'Sim': 'Não' ."</span></td>";	
+		$texto .= "<td><span><b>Forncedor </b></span></td><td><span>".$this->fornecedor."</span></td>";	
 		$texto .= "</tr>";	
 		}
 									

@@ -165,8 +165,8 @@ class Maquinario{
 		$sql->conn_bd();
 		$g = new Glob();
 		$aux=0;
-		$query = "SELECT * FROM maquinario WHERE (modelo LIKE '%%%s%%' || fabricante LIKE '%%%s%%' || matricula LIKE '%%%s%%') &&  oculto = 0 && id_empresa=".$_SESSION['id_empresa'];
-		$query_tra = $g->tratar_query($query, $name, $name, $name);
+		$query = "SELECT * FROM maquinario WHERE modelo LIKE '%%%s%%' &&  oculto = 0 && id_empresa=".$_SESSION['id_empresa'];
+		$query_tra = $g->tratar_query($query, $name);
 
 		while($result =  mysql_fetch_array($query_tra)){
 			$return[$aux][0] = $result['id'];
