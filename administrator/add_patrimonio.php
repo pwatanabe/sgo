@@ -27,6 +27,52 @@ $valor = str_replace($source, $replace, $get_valor); //remove os pontos e substi
 return $valor; //retorna o valor formatado para gravar no banco
 }         
 
+function confereArquivo(){
+    
+                            $_UP['pasta'] = '../images/'.$_SESSION['id_empresa'].'/comprovantes/';
+                             
+                             if(!is_dir($_UP['pasta'])){
+                                 mkdir($_UP['pasta']);
+                             }                                                 
+                            // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
+                            $_UP['renomeia'] = false;
+                            // Array com os tipos de erros de upload do PHP
+                            $_UP['erros'][0] = 'Não houve erro';
+                            $_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
+                            $_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
+                            $_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
+                            $_UP['erros'][4] = 'Não foi feito o upload do arquivo';
+                            
+                            // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
+                            if ($_FILES['arquivo']['error'] != 0) {
+                              die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$_FILES['arquivo']['error']]);
+                              exit; // Para a execução do script
+                            }
+                            // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar                      
+                          
+                            // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
+                            // Primeiro verifica se deve trocar o nome do arquivo
+                            if ($_UP['renomeia'] == true) {
+                              // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
+                              $nome_final = md5(time()).'.jpg';
+                            } else {
+                              // Mantém o nome original do arquivo
+                              $nome_final = $_FILES['arquivo']['name'];
+                              $_UP['nomefinal'] = $nome_final;
+                            }
+                              
+                            // Depois verifica se é possível mover o arquivo para a pasta escolhida
+                            if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $_UP['pasta'] . $nome_final)) {
+                              // Upload efetuado com sucesso, exibe uma mensagem e um link para o arquivo
+                              echo "Upload efetuado com sucesso!";
+                              echo '<a href="' . $_UP['pasta'] . $nome_final .  $_UP['nomefinal'].'">Clique aqui para acessar o arquivo</a>';
+                            } else {
+                              // Não foi possível fazer o upload, provavelmente a pasta está incorreta
+                              echo "Não foi possível enviar o arquivo, tente novamente";
+                            }
+                            return $_UP['nomefinal'];
+}
+
 
     
 
@@ -201,13 +247,15 @@ return $valor; //retorna o valor formatado para gravar no banco
                                 $valor_custo->add_valor_custo($valor2, $id_tipo_custo);
                                 $id_valor_custo = $valor_custo->add_valor_custo_bd();
                             }
-                         
-                         $id_empresa = $_POST['empresa'];
+                        
+                         $nome_final = confereArquivo();
+                            
+                          $id_empresa = $_POST['empresa'];
                         
 
 
                       $patrimonio = new Patrimonio_geral();
-                      $patrimonio->add_patrimonio_geral($nome, $matricula, $marca, $descricao, $quantidade, $valor, $id_valor_custo, $id_empresa);
+                      $patrimonio->add_patrimonio_geral($nome, $matricula, $marca, $descricao, $quantidade, $valor, $id_valor_custo, $id_empresa, $nome_final);
     
                       if($patrimonio->add_patrimonio_geral_bd()){
                         echo '<div class="msg" style="float: left;">Patrimonio adicionado com sucesso !</div>';
@@ -255,10 +303,11 @@ return $valor; //retorna o valor formatado para gravar no banco
                       
                       $id_empresa = $_POST['empresa'];
                       
+                      $nome_final = confereArquivo();
                       
                       $patrimonio = new Patrimonio_geral();                     
     
-                      if($patrimonio->atualiza_patrimonio_geral($nome, $matricula, $marca, $descricao, $quantidade, $valor, $id_valor_custo, $id_empresa, $id)){
+                      if($patrimonio->atualiza_patrimonio_geral($nome, $matricula, $marca, $descricao, $quantidade, $valor, $id_valor_custo, $id_empresa, $nome_final , $id)){
                         
                         echo '<div class="msg" style="float: left;">Patrimonio atualizado com sucesso !</div>';
                         echo '<script>alert("Patrimonio Geral atualizado com sucesso")</script>';
@@ -687,7 +736,7 @@ return $valor; //retorna o valor formatado para gravar no banco
 
              <div id="content">   
             <div class="formulario">
-             <form method="POST" class="add_patrimonio" id="add_patrimonio" name="patrimonio" action="add_patrimonio.php" onsubmit="return validate(this)">
+             <form enctype="multipart/form-data" method="POST" class="add_patrimonio" id="add_patrimonio" name="patrimonio" action="add_patrimonio.php" onsubmit="return validate(this)">
               <div class="title-box" style="float:left"><div style="float:left"><img src="../images/edit-icon.png" width="35px"></div><div style="float:left; margin-top:10px; margin-left:10px;"><span class="title">CADASTRAR PATRIMONIO EM GERAL</span></div><input type="button" style="margin-top: 5px;" onclick="window.location.href='add_patrimonio.php'" id="button" class="button" name="button"value="Voltar"></div>
                <input type="hidden" id="local" name="local" value="<?php echo $_GET['local'] ?>"><?php //armazena o local da requisição da pagina ?>
                <input type="hidden" id="cadastrar_patrimonio_geral" name="cadastrar_patrimonio_geral" value="cadastrar_patrimonio_geral"> 
@@ -709,6 +758,10 @@ return $valor; //retorna o valor formatado para gravar no banco
                                        
                                     </select>
                    </td> </tr>
+              
+                  <tr><td colspan="2"><span>Deseja enviar nota fiscal ?</span><td><tr>
+                  <tr><td colspan="3"><input type="file" id="arquivo" name="arquivo" /></td></tr>
+             
                   <tr><td><span>Empresa:</span></td><td>
                                   <select id="empresa" name="empresa"  style="width:100%" onchange="buscar_responsavel()">
                                     <option value="no_sel">Selecione</option>
@@ -1051,7 +1104,7 @@ return $valor; //retorna o valor formatado para gravar no banco
                    ?>
             <div id="content">   
             <div class="formulario">
-             <form method="POST" class="add_patrimonio" id="add_patrimonio" name="patrimonio" action="add_patrimonio.php" onsubmit="return validate(this)">
+             <form enctype="multipart/form-data" method="POST" class="add_patrimonio" id="add_patrimonio" name="patrimonio" action="add_patrimonio.php" onsubmit="return validate(this)">
               <div class="title-box" style="float:left"><div style="float:left"><img src="../images/edit-icon.png" width="35px"></div><div style="float:left; margin-top:10px; margin-left:10px;"><span class="title">EDITAR PATRIMONIO EM GERAL</span></div><input type="button" style="margin-top: 5px;" onclick="window.location.href='add_patrimonio.php'" id="button" class="button" name="button"value="Voltar"></div>
                <input type="hidden" id="atualiza_patrimonio_geral" name="atualiza_patrimonio_geral" value="editar_patrimonio_geral">
                <input type="hidden" id="id" name="id" value="<?php echo $patrimonio_geral->id ?>">
@@ -1060,9 +1113,9 @@ return $valor; //retorna o valor formatado para gravar no banco
                   <tr><td><span>Matricula:</span></td> <td><input class="uppercase" value="<?php echo $patrimonio_geral->matricula ?>" type="text" name="matricula" id="matricula"></td></tr>                               
                   <tr><td><span>Nome:</span></td><td><input type="text" name="nome" id="nome" value="<?php echo $patrimonio_geral->nome ?>"><td><span> Marca:</span></td><td><input type="text" name="marca" id="marca"value="<?php echo $patrimonio_geral->marca ?>"></td></td></tr>
                   <tr><td><span>Quantidade:</span></td><td><input type="text" name="quantidade" id="quantidade" value="<?php echo $patrimonio_geral->quantidade ?>"> <td><span> Descricao:</span></td><td><input type="text" name="descricao" id="descricao" value="<?php echo $patrimonio_geral->descricao?>"></td></td></tr>
-                  <tr><td><span>Valor:</span></td><td><input type="numeric" name="valor" onkeyup="mascara(this, mvalor);" id="valor" value="<?php echo 'R$' . number_format($patrimonio_geral->valor, 2, ',', '.'); ?>"></td><td></tr>
-                  
+                  <tr><td><span>Valor:</span></td><td><input type="numeric" name="valor" onkeyup="mascara(this, mvalor);" id="valor" value="<?php echo 'R$' . number_format($patrimonio_geral->valor, 2, ',', '.'); ?>"></td><td></tr>                  
                   <tr><td><span>Valor de Custo:</span></td> <td><input type="text" onkeyup="mascara(this, mvalor);"name="valor_custo" id="valor_custo" value="<?php echo  'R$' . number_format($valor_custo->valor, 2, ',', '.') ?>"></td>
+                      
                                   <td>
                                       <select id="tipo_custo" name="tipo_custo"  style="width:100%">
                                     <option value="no_sel">Selecione</option>
@@ -1080,7 +1133,16 @@ return $valor; //retorna o valor formatado para gravar no banco
                                  </select>
                                   </td>
                               </tr>
-                  
+                  <?php 
+                        if($patrimonio_geral->nome_comprovante != ""){
+                            ?>
+                              <tr><td colspan="2"><span>Ver Comprovante</span></td><td colspan="2"><a href="../images/<?php echo $_SESSION['id_empresa']?>/comprovantes/<?php echo $patrimonio_geral->nome_comprovante ?>" id="vercomp" name="vercomp"><img style="width: 25px; height: 25px;" src="../img/ver.png"></a></td><tr>
+                            <?php }else{ ?>
+                        
+                             <tr><td colspan="2"><span>Deseja enviar nota físcal ?</span><td><tr>
+                             <tr><td colspan="3"><input type="file" id="arquivo" name="arquivo" /></td></tr>
+                             
+                            <?php } ?>
                   <tr><td><span>Empresa:</span></td><td>
                                   <select id="empresa" name="empresa"  style="width:100%" onchange="buscar_responsavel()">
                                     <option value="no_sel">Selecione</option>

@@ -4,9 +4,13 @@
 
 
 
-    <div  style="padding:10px;" class="formulario-regiao-titulo">
-                <div class="separador" style="padding: 0; padding-top: 5px; margin: 0 auto; float:left; margin-left:25%;  width: 50%;" ><span style="color: #ddd;  font-size: 15px;">Cadastro de Região</span><input id='mostraForm'type="button" style="background-color: rgba(000,000,000,0.1); border:0; float:right; color:#cc0000; padding-bottom: 5px;" value="Configurar" ></div>
+    <div style="padding:10px;" class="formulario-regiao-titulo">
+                <div class="separador" style="padding: 0;  padding-top: 5px; margin: 10px; float:left; margin-left:25%;  width: 50%;" ><span style="color: #ddd;  font-size: 15px;">Cadastro de Região</span><input id='mostraForm' type="button" style="background-color: rgba(000,000,000,0.1); border:0; float:right; color:#cc0000; padding-bottom: 5px;" value="Configurar" ></div>
     </div>
+    <div style="padding:10px;" class="formulario-regiao-titulo">
+                <div class="separador" style="padding: 0; padding-top: 5px; margin: 10px; float:left; margin-left:25%;  width: 50%;" ><span style="color: #ddd;  font-size: 15px;">Plano de Contas</span><input id='mostraPlano' type="button" style="background-color: rgba(000,000,000,0.1); border:0; float:right; color:#cc0000; padding-bottom: 5px;" value="Configurar" ></div>
+    </div>
+   
    
         <?php if(isset($_POST['cadastrar'])){
             $codigo = $_POST['codigo'];
@@ -36,7 +40,29 @@
                  echo "<div class='msg'>Você precisa uma regiao.</div>";
             }
            
-        } ?>      
+        } 
+        
+        if(isset($_POST['cadastrarPlano'])){
+            $plano_conta = new PlanoConta();
+            
+           
+            $nome = $_POST['nome'];
+            $codigo = $_POST['codigo'];
+            $id_empresa = $_SESSION['id_empresa'];
+            
+            $plano_contas = $plano_conta->add_PlanoConta($nome, $codigo, $id_empresa);
+            
+            if($plano_conta->add_PlanoContabd()){
+                echo '<script>alert("Plano cadastrado")</script>';
+            }else{
+                echo '<script>alert("Algum problema ocorreu, não foi possível caastrar este plano")</script>';
+            }
+                  
+            
+        }
+        ?>  
+    
+        
             <div id="form" hidden="on" id="cadastrar">
             <form method="POST" action="configuracoes">
             <div class="formulario-regiao-dados">
@@ -79,6 +105,21 @@
                 <input style="margin: 20px;"  class="button" type="submit" id="cadastrar" name="cadastrar" value="Cadastrar">
             </div>
         </form> 
+        </div>    
+    
+    <div  id="formPlano" hidden="on">
+            <form method="POST" action="configuracoes">
+            <div class="formulario-regiao-dados">
+                <span>Código</span><input type="text" id="codigo" name="codigo">
+            </div>
+            <div class="formulario-regiao-dados">
+                <span>Nome</span><input type="text" id="nome" name="nome">
+            </div>    
+            <input   type="hidden" name="cadastrarPlano" value="cadastrarPlano">
+            <div>
+                <input style="margin: 20px;" class="button" type="submit" value="Cadastrar">
+            </div>    
+            </form>            
         </div>    
 </div>
 

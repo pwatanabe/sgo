@@ -385,20 +385,20 @@ class Cliente {
 			}
 
         }
- //    public function get_all_cli_by_id($id){
-	// 	 $sql = new Sql();
-	// 	 $sql->conn_bd();
-	// 	 $g = new Glob();
+    public function get_all_cli_by_id($id){
+	 	 $sql = new Sql();
+		 $sql->conn_bd();
+		 $g = new Glob();
 
-	// 	 $query = "SELECT * FROM clientes where id = '$id'" ;		
-	// 	 $result = mysql_query($query);
+	 	 $query = "SELECT * FROM clientes where id = '$id'" ;		
+	 	 $result = mysql_query($query);
 		
                  
- //                 while ($row = mysql_fetch_row($result)) {                     
- //                     return $row;
- //                }
+                while ($row = mysql_fetch_row($result)) {                     
+                    return $row;
+               }
 
-	// }
+	}
 
 	public function printCli_Jur(){	
 	 	

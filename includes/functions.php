@@ -21,9 +21,18 @@ Class Functions{
                                     <script>
                                                $(document).ready(function(){
                                                     $("#mostraForm").click(function(){
+                                                     
                                                         $("#form").fadeToggle("slow");
                                 //                      
                                                     });
+                                                    
+                                                    
+                                                    $("#mostraPlano").click(function(){
+                                                     
+                                                        $("#formPlano").fadeToggle("slow");
+                                //                      
+                                                    });
+                                
                                                 });
                                     </script>
 				 </head>';
@@ -35,6 +44,9 @@ Class Functions{
 			?>
 			<script type="text/javascript">
                             
+                              
+                                                
+                                                
 				    function exibe(){
 				        // document.getElementById("popup").style.display = "block";
 				        var windowWidth = window.innerWidth;

@@ -237,7 +237,8 @@ class Patrimonio{
 			echo "<tr><td><span><b>Data Fim do seguro <b/></span></td><td><span>".$veiculo->data_fim_seg."</span></td></tr>";			
 			echo "<tr><td><span><b>Responsável <b/></span></td><td><span>".$func[0]."</span></td></tr>";			
 			echo "<tr><td><span><b>Forncedor <b/></span></td><td><span>".$cliente->nome_fornecedor."</span></td></tr>";
-			echo "<tr><td><span><b>Empresa Responsável <b/></span></td><td><span>".$empresa->nome_fantasia."</span></td></tr>";			
+			echo "<tr><td><span><b>Empresa Responsável <b/></span></td><td><span>".$empresa->nome_fantasia."</span></td></tr>";
+                        
 		
 			
 			echo "VEÍCULO";
@@ -297,8 +298,11 @@ class Patrimonio{
 			echo "<tr><td><span><b>Marca<b/></span></td><td><span>".$patrimonio_geral->marca."</span></td></tr>";
 			echo "<tr><td><span><b>Valor <b/></span></td><td><span>".$patrimonio_geral->valor."</span></td></tr>";
 			echo "<tr><td><span><b>Descrião <b/></span></td><td><span>".$patrimonio_geral->descricao."</span></td></tr>";
-					
-		
+                        if($patrimonio_geral->nome_comprovante != ""){
+                                echo "<tr><td><span><b>Ver comprovante</b></span></td><td><a href='../images/".$_SESSION['id_empresa']."/comprovantes/".$patrimonio_geral->nome_comprovante."'><img style='width:25px; heigth:25px;' src='../img/ver.png'><a></td><tr>";		
+                            }else{
+                             echo "<tr><td><span><b>Voce não tem comprovante cadastrado</b></span></td><td><a href='add_patrimonio.php?tipo=editar&controle=0&id=".$patrimonio_geral->id."'>CADASTRAR !<a></td><tr>";		   
+                            }
 			
 			echo "PATRIMONIO GERAL";
 		}

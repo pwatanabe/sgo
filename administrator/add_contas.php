@@ -3,6 +3,7 @@ include("restrito.php");
 include_once("../includes/functions.php");
 include_once("../model/class_cliente.php");
 include_once("../model/class_conta_bd.php");
+include_once("../model/class_plano_conta.php");
 include_once("../includes/util.php");
 
 
@@ -28,6 +29,23 @@ $(document).ready(function(){
         $("#fp").fadeToggle();
         $("#voltar1").fadeToggle();
     });
+    
+    $("#tipo_data_vencimento").change(function(){
+         var tipo = $("#tipo_data_vencimento").val();
+         var parcelas = $("#parcelas").val();
+        
+        
+        var url = '../ajax/ajax_tipo_data_vencimento?tipo='+tipo+'&parcelas='+parcelas;  //caminho do arquivo php que irá buscar as cidades no BD
+			          $.get(url, function(dataReturn) {
+			            $('#tipo_data').html(dataReturn);  //coloco na div o retorno da requisicao
+			          });
+//        
+        $("#tipo_data").show();
+//        $("#voltar3").fadeToggle();
+    });
+    
+ 
+    
     
     
      $("#vr").click(function(){
@@ -75,16 +93,17 @@ $(document).ready(function(){
   
 });
     function confereNegativos(){
-      var aux = document.getElementById('num_parcelas').value;
+      var aux = document.getElementById('parcelas').value;
       if(aux <= 0){
         alert("Você não pode adicionar uma conta com menos de uma parcela !")
-        document.getElementById('num_parcelas').value = 1;
+        document.getElementById('parcelas').value = 1;
       }
     }
 
 
     function abreEnvio(){
         document.getElementById('abreenvio').hidden = false ;
+        
     }
     
     function visualizaComprovante(str){
@@ -95,7 +114,11 @@ $(document).ready(function(){
       var id_empresa = aux[2];
         window.open("../images/"+id_empresa+"/comprovantes/"+id_conta+"/"+nome_comprovante);
     }
-
+    
+function fechaParcela() {    
+    $("#tipo_data").hide();
+}
+    
 
 //    function addContaPaga(id){     
 //      
@@ -132,92 +155,99 @@ $(document).ready(function(){
                
             <?php
             $contas = new Contas();
-            
+            $parcelas = array();
             
             if(isset($_POST['apagar_areceber']) && $_POST['apagar_areceber'] != "" ){
                 
                 foreach ($_POST as $key => $value) {                          
                     
-                             if($key == 'cod' && isset($value)){
-                                $cod = $value;                                 
-                             }
-                             if($key == 'desc' && isset($value)){
-                                $desc = $value;                                
-                             }
-                              if($key == 'select_fornecedor' && isset($value)){
-                                $select_fornecedor = $value;                                
-                             }
-                               if($key == 'sem_fornecedor_cliente' && isset($value)){
-                                $sem_fornecedor_cliente = 'Sem fornecedor ou cliente';                                
-                             }
-                               if($key == 'obra' && isset($value)){
-                                $obra = $value;                                 
-                             }
-                               if($key == 'valor' && isset($value)){
-                                $source = array('.', ',','R$');
-                                $replace = array('', '.','');
-                                $valor = str_replace($source, $replace, $value); //remove os pontos e substitui a virgula pelo ponto                                                              
-                             }
-                               if($key == 'multa' && isset($value)){
-                                $source = array('.', ',','R$');
-                                $replace = array('', '.','');
-                                $multa = str_replace($source, $replace, $value);                              
-                             }
-                              if($key == 'banco' && isset($value)){
-                                $banco = $value;                                
-                             }                            
-                               if($key == 'num_parcelas' && isset($value)){
-                                $num_parcelas = $value;                                
-                             }
-                               if($key == 'data' && isset($value)){                                   
-                                $data = $value;                                
-                             }
-                                if($key == 'juros' && isset($value)){
-                                $source = array('.', ',','R$');
-                                $replace = array('', '.','');    
-                                $juros = str_replace($source, $replace, $value);                                
-                             } 
-                             
-                            if($key == 'periodo_juros' && isset($value)){
-                                $periodo_juros = $value;                                 
-                             } 
-                               if($key == 'apagar_areceber' && isset($value)){
-                                $tipo = $value;                                
-                             } 
-                             $id_empresa = $_SESSION['id_empresa'];
-                         } 
+                    
+                        
+                    for($i = 1; $i<= $_POST['parcelas']; $i++){
+                        if($key == "parcela".$i ){                        
+                        $parcelas[$i] = $value;
+                        };                        
+                    }
+                    
+                    if($key = "apagar_areceber"){
+                        echo $tipo = $value;
+                    }
+                    
+                    if($key == "cod"){
+                        echo $cod = $value;                        
+                    }
+                    if($key == "desc"){
+                       echo  $descricao = $value;                        
+                    }
+                    if($key == "obra"){
+                        echo $obra = $value;                        
+                    }
+                    if($key == "banco"){
+                        echo $banco = $value;                        
+                    }
+                    if($key == "plano"){
+                        echo $plano = $value;                        
+                    }
+                    if($key == "valor"){
+                        echo $valor = $value; 
+                        $source = $array('.',',','R$');
+                        $replace = $array('','.','');
+                        $valor = str_replace($source, $replace, $value);
+                    }
+                    if($key == "multa"){
+                        echo $nulta = $value;;
+                         $source = $array('.',',','R$');
+                         $replace = $array('','.','');
+                         $multa = str_replace($source, $replace, $value);
+                    }
+                    if($key == "juros"){
+                        echo $juros = $value;;
+                        $source = $array('.',',','R$');
+                        $replace = $array('','.','');
+                        $juros = str_replace($source, $replace, $value);
+                        
+                    }
+                    if($key == "periodo_juros"){
+                        echo $periodo_juros = $value;                        
+                    }
+                    if($key == "apagar_areceber"){
+                        echo $apagar_areceber = $value;                        
+                    }
+                    if($key == "select_fornecedor_cliente"){                        
+                       echo  $fornecedor = $value;                        
+                    }                                  
+                }
+                    $id_empresa = $_SESSION['id_empresa'];  
+                      
                          
-                         if(isset($sem_fornecedor_cliente) && $sem_fornecedor_cliente != ""){
-                             $id_fornecedor = $sem_fornecedor_cliente;
-                         }else{
-                            if(isset($_POST['select_fornecedor_cliente']))
-                             $id_fornecedor = $_POST['select_fornecedor_cliente'];                             
-                         }
+                         
+                         
+                        echo $periodo_juros;
                          
                         
-                         if(isset($cod) && $cod != "" && isset($valor) && $valor != "" && isset($data) && $data != "" && isset($banco) && $banco != ""){
-               
-                         $contas->add_contas($cod, $desc, $id_fornecedor, $obra, $banco, $valor, $multa, $data, $num_parcelas, $juros, $periodo_juros, $tipo, $id_empresa);
-                      
-                         $contas->add_contas_bd();
-                         }else {
-                             
-                             echo '<div class="msg">Por favor preencha os seguintes campos : <br>';
-                             $err = 0;                            
-                             
-                             if($cod == ""){
-                                 echo 'Codigo<br>';                                 
-                             }
-                             if($valor == ""){
-                                 echo 'Valor<br>';
-                             }
-                             if($data == ""){
-                                 echo 'Data<br>';
-                             }
-                             if($banco == ""){
-                                 echo 'Banco<br>';
-                             }
-                         }
+//                         if(isset($cod) && $cod != "" && isset($valor) && $valor != "" && isset($data) && $data != "" && isset($banco) && $banco != ""){
+//               
+//                         $contas->add_contas($cod, $desc, $id_fornecedor, $obra, $banco, $valor, $multa, $data, $id_parcelas, $juros, $periodo_juros, $tipo, $id_empresa);
+//                      
+////                         $contas->add_contas_bd();
+//                         }else {
+//                             
+//                             echo '<div class="msg">Por favor preencha os seguintes campos : <br>';
+//                             $err = 0;                            
+//                             
+//                             if($cod == ""){
+//                                 echo 'Codigo<br>';                                 
+//                             }
+//                             if($valor == ""){
+//                                 echo 'Valor<br>';
+//                             }
+//                             if($data == ""){
+//                                 echo 'Data<br>';
+//                             }
+//                             if($banco == ""){
+//                                 echo 'Banco<br>';
+//                             }
+//                         }
             }       
             ?>
                   
@@ -240,6 +270,7 @@ $(document).ready(function(){
                        <tr><td><span>Forncedor:</span></td><td>
                                   <select id="select_fornecedor" name="select_fornecedor_cliente"  style="width:100%" title="Selecione o fornecedor">
                                     <option value="no_sel">Selecione</option>
+                                    <option value="sem_fornecedor">SEM FORNECEDOR</option>
                                     <?php 
                                        $fornecedor = new Cliente();
                                        $fornecedor = $fornecedor->get_all_fornecedor();
@@ -248,7 +279,7 @@ $(document).ready(function(){
                                        }
                                      ?>
                                  </select></td> 
-                                 <td><span>Sem Fornecedor</span></td><td><input type="checkbox" id="sem_fornecedor_cliente" name='sem_fornecedor_cliente' type="fornecedor não consta no cadastrado"></td>
+                                 
                        </tr>
                        <tr>
                            <td colspan="2"><span>Pagamento relacionado a obra:</span></td>
@@ -259,21 +290,55 @@ $(document).ready(function(){
                         </select>
                             </td>
                        </tr>
+                     
+                        <tr>
+                           <td colspan="2"><span>Plano de Contas:</span></td>
+                            <td>
+                        <select name='plano' id='plano'>                          
+                              <?php
+                                $plano_deconta = new PlanoConta();
+                                $array = $plano_deconta->get_all_PlanoConta();
+                                foreach ($array as $key => $value) {
+                                     echo "<option value=".$value->id.">".$value->nome."/".$value->codigo."</option>";
+                                }
+                                
+                            ?>
+                        </select>
+                            </td>
+                       </tr>
+                       
                        <tr>
                             <td>
                            <span>Banco</span></td>
                             <td>
                                 <input type="text" name='banco' id='banco' >                          
-                            </td>
-                            <td><span>Data do vencimento: </span></td>
-                            <td><input type="date" name="data" id="data"></td>
+                            </td>                            
                        </tr>
                        <tr>                                             
                            <td><span>Valor: </span></td>
                            <td><input onkeyup="mascara(this, mvalor);" type="text" name="valor" id="valor"></td>
                            <td><span>N° Parecelas: </span></td>
-                           <td><input type="number" value="1" onchange="confereNegativos()" name='num_parcelas' id="num_parcelas"></td>
+                           <td><input type="number" value="1" onchange="confereNegativos()" name='parcelas' id="parcelas"></td>
                        </tr>
+                       <tr>
+                           <td><span>Data de vencimento</span></td>
+                            <td>
+                                <select id="tipo_data_vencimento">
+                                    <option value="0">Selecione</option>
+                                    <option id="tipo" value="1">Mensal</option>
+                                    <option id="tipo" value="2">Quinzena</option>                                            
+                                    <option id="tipo" value="3">Inserir data por parcela</option>
+                                </select>
+                            </td>    
+                            <td><span>Tipo de pagamento</span></td><td><select id="tipo_de_pagamento">
+                                    <option value="0">Selecione</option>
+                                    <option id="tipo" value="Boleto">Boleto</option>
+                                    <option id="tipo" value="Cartão">Cartão</option>                                            
+                                    <option id="tipo" value="Crédito em Conta">Crédito em conta</option>
+                                    <option id="tipo" value="Cheque">Cheque</option>
+                                </select></td>
+                       </tr>
+                       <div id="tipo_data"></div> 
                        <tr>
                            <td><span>Multa por Atraso:</span></td><td><input onkeyup="mascara(this, mvalor);" type="text" id="multa" name="multa"></td>
                            <td><span>Juros:</span></td><td><input type="text" id="juros" name="juros" onkeyup="mascara(this, mvalor);"></td><td>
@@ -294,6 +359,7 @@ $(document).ready(function(){
                       
                        
                        <div id="adicionar" style="margin:0 auto; margin-top:30px;"><input type="button" class="button" value="Cancelar"><input class="button" type="submit" value="Guardar"></div>
+                  
                    </form>
               </div>
                 
@@ -345,7 +411,7 @@ $(document).ready(function(){
                            <td><span>Valor: </span></td>
                            <td><input onkeyup="mascara(this, mvalor);" type="text" name="valor" id="valor"></td>
                            <td><span>N° Parecelas: </span></td>
-                           <td><input type="number" value="1" onchange="confereNegativos()" name='num_parcelas' id="num_parcelas"></td>
+                           <td><input type="number" value="1" onchange="confereNegativos()" name='parcelas' id="parcelas"></td>
                            
                            
                        </tr>
