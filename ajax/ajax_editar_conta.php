@@ -125,6 +125,7 @@ $nome_comprovante  = "";
                     if($cli[1]== ""){
                         $cli[1]= 'Fornecedor não cadastrado';
                     }
+                    
                    ?>
                     
                     <div id="contas" class="tabela-contas-apagar" style="<?php  if($i % 2 == 1){echo $style1;} ?> ">                               
@@ -148,16 +149,58 @@ $nome_comprovante  = "";
                                     </div>
                                 </div>
                                  <div class="row">
-                                     <div class="center">
-                                         <div class="col-5">
-                                             <div class="item"><label>Data de vencimento: </label> <label><?php echo data_padrao_brasileiro($value->data_vencimento) ?></label></div>
-                                        </div>
-                                         <div class="col-5">
+                                     <div class="center">                                         
+                                          <div class="col-5">
                                              <div class="item"><label>Banco: </label> <label><?php echo $value->banco ?></label></div>
                                         </div>
                                         <div class="col-5">
                                              <div class="item"><label>Obra: </label> <label><?php echo $value->obra ?></label></div>
                                         </div>
+                                         <div class="col-10">
+                                             <div class="item"><label>Clique na data que deseja deseja enviar comprovante e considerar paga: </label></div>
+                                        </div>
+                                         
+                                         
+                                        <?php 
+                                        
+                                        $parcelas = new Parcelas();
+                                        $lista = array();
+                                        
+                                        $lista[] = $parcelas->get_parcelas($value->id);
+                                        $color = "#ffffff";
+                                        $color2 = "#cccccc";
+                                        $i = 1;
+                                        foreach ($lista[0][1] as $key => $data) {                                           
+                                            ?>
+                                        
+                                         
+                                         
+                                         <div class="col-2" style="<?php if($i % 2 == 0){ echo "background-color:".$color.""; }else{ echo "background-color:".$color2."";} ?>; cursor: pointer; ">
+                                            
+                                            <table>
+                                                <tr><td><label>Parcela: </label></td><td><label><?php echo $i ?></label></td></tr>
+                                                <tr><td><label>Data: </label></td><td><label><?php echo data_padrao_brasileiro($data); ?></label></td><tr>
+                                            </table>
+                                            
+                                        </div>
+                                            <?php 
+                                            $i++;
+                                        }
+                                        
+                                        ?> 
+                                       
+                                        
+                                         
+<!--                                         <div class="col-5">
+                                             <div class="item"><label>Data de vencimento: </label> <label><?php ?></label></div>
+                                        </div>-->
+                                         
+                                         
+                                         
+                                         
+                                         
+                                         
+                                        
                                          
                                         <?php
                                         if(isset($value->status) && $value->status == 1 && isset($value->tipo) && $value->tipo == 1){ ?> 

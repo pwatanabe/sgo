@@ -24,7 +24,7 @@ class Parcelas{
                 $g = new Glob();
   
             
-//                Parcelas::confere_ultimaparcela($this->id_conta);
+                Parcelas::confere_ultimaparcela($this->id_conta);
                 
                 
                 $query = "INSERT INTO parcelas (id_conta, data, parcela_n, id_empresa) 
@@ -34,6 +34,33 @@ class Parcelas{
 		}else{
                     return false;
 		} 
+        }
+        
+        public function get_parcelas($id_conta){
+                $sql= new Sql();
+		$sql->conn_bd();
+                $g = new Glob();
+                
+                $parcelas = new Parcelas;
+                
+                $query = "SELECT * FROM parcelas WHERE id_conta = ".$id_conta." ORDER BY parcela_n ASC";
+                
+                $result = mysql_query($query);
+                
+                while ($row = mysql_fetch_array($result, MYSQLI_ASSOC)){  
+                    
+                $data[] = $row['data'];
+                $parcela[] = $row['parcela_n'];
+                 
+                }
+                
+                $lista[1] = $data;
+                $lista[2] = $parcela;
+              
+                
+                return $lista;
+                
+                
         }
         
         public function get_parcelas_pagas($id_conta){

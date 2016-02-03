@@ -10,17 +10,17 @@ function carregalista($result){
                 $conta = new Contas();
                 $conta->id = $row['id'];
                 $conta->codigo = $row['codigo'];
-                $conta->tipo = $row['tipo'];
+                $conta->tipo_a_p_r = $row['tipo_a_p_r'];
                 $conta->valor = $row['valor'];
                 $conta->juros = $row['juros'];
                 $conta->periodo_juros = $row ['periodo_juros'];
-                $conta->fornecedor_cliente = $row['fornecedor_cliente'];
-                $conta->data_vencimento = $row['data_vencimento'];               
+                $conta->fornecedor_cliente = $row['fornecedor_cliente'];              
                 $conta->descricao = $row['descricao'];
                 $conta->obra = $row['obra'];
                 $conta->banco = $row['banco'];           
-                $conta->parcelas = $row['parcelas'];
-                
+                $conta->id_parcela = $row['id_parcela'];
+                $conta->tipo_de_pagamento = $row['tipo_de_pagamento'];
+                $conta->plano_de_conta = $row['plano_de_conta'];                
                 $conta->status = $row['status'];  
                 
                 $lista[] = $conta; 
@@ -107,7 +107,7 @@ function carregalista($result){
             $sql->conn_bd();
             $g = new Glob();
             
-            $query = "SELECT * FROM contas WHERE tipo = 1 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 0";
+            $query = "SELECT * FROM contas WHERE tipo_a_p_r = 1 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 0";
             
             $result = $g->tratar_query($query);
             
