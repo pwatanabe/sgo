@@ -35,32 +35,37 @@ function carregalista($result){
         public $descricao;
 	public $fornecedor_cliente;
 	public $id_obra;
+        public $plano;
 	public $banco;
 	public $valor;
 	public $multa;
-	public $data_vencimento;
+	public $id_parcela;
 	public $parcelas;   
 	public $juros;
         public $periodo_juros;      
-        public $tipo;
+        public $tipo_de_pagamento;
 	public $oculto;
+        public $tipo_a_p_r;
         public $id_empresa;
 	
-        public function add_contas($codigo, $desc, $fornecedor_cliente, $id_obra, $banco, $valor, $multa, $data_vencimento, $parcelas, $juros, $periodo_juros, $tipo, $id_empresa){
+        public function add_contas($cod, $desc, $fornecedor, $obra, $plano, $banco, $valor, $id_parcela, $tipo_de_pagamento, $multa, $juros, $periodo_juros, $tipo_a_p_r, $id_empresa){
+                                    
             
-            $this->codigo = $codigo;
+            $this->codigo = $cod;
             $this->descricao = $desc;
-            $this->fornecedor_cliente = $fornecedor_cliente;
-            $this->id_obra = $id_obra;
+            $this->fornecedor_cliente = $fornecedor;
+            $this->id_obra = $obra;
+            $this->plano = $plano;
             $this->banco = $banco;
             $this->valor = $valor;
-            $this->multa = $multa;
-            $this->data_vencimento = $data_vencimento;
-            $this->parcelas = $parcelas;            
+            $this->id_parcela = $id_parcela;
+            $this->tipo_de_pagamento = $tipo_de_pagamento;   
+            $this->multa = $multa;                     
             $this->juros = $juros;
             $this->periodo_juros = $periodo_juros;
-            $this->tipo = $tipo;    
+            $this->tipo_a_p_r = $tipo_a_p_r;
             $this->id_empresa = $id_empresa;
+            
         }
         
         public function add_contas_bd(){
@@ -68,17 +73,36 @@ function carregalista($result){
 		$sql->conn_bd();
 
 		$g = new Glob();                
-		$query = "INSERT INTO contas (codigo, descricao, fornecedor_cliente, obra, banco, valor, multa, data_vencimento, parcelas, juros, periodo_juros, tipo, id_empresa) 
-		                     VALUES ( '%s',   '%s',       '%s',             '%s',   '%s',  '%s',  '%s',      '%s',        '%s',    '%s',     '%s',       '%s',    '%s')";
-		
-		if($g->tratar_query($query,  $this->codigo, $this->descricao, $this->fornecedor_cliente, $this->id_obra, $this->banco, $this->valor, $this->multa, $this->data_vencimento, $this->parcelas,  $this->juros, $this->periodo_juros, $this->tipo, $this->id_empresa)){
-			return true; 
+		$query = "INSERT INTO contas (codigo, descricao, fornecedor_cliente, obra, plano_de_conta, banco, valor, id_parcela, tipo_de_pagamento, multa, juros, periodo_juros, tipo_a_p_r, id_empresa) 
+		                      VALUES ( '%s',     '%s',         '%s',         '%s',  '%s', '%s',   '%s',    '%s',    '%s',  '%s',   '%s',     '%s',    '%s',   '%s')";
+		 
+		if($g->tratar_query($query,  $this->codigo, $this->descricao, $this->fornecedor_cliente, $this->id_obra, $this->plano ,$this->banco, $this->valor, $this->id_parcela, $this->tipo_de_pagamento, $this->multa, $this->juros, $this->periodo_juros, $this->tipo_a_p_r, $this->id_empresa)){
+			echo "<script>alert('adicionou')</script>";
+                        return true; 
+                        
 		}else{
+                    echo "<script>alert('nao adiciou')</script>";
 			return false;
 		} 
         }
         
-    public function ver_contas_apagar(){
+        public function get_ultima_conta(){
+                $sql= new Sql();
+		$sql->conn_bd();
+		$g = new Glob(); 
+                
+                $query = "SELECT MAX(id) FROM contas";
+                
+                $result = mysql_query($query);
+                
+                $id = mysql_fetch_row($result);
+                
+                return $id[0];
+            
+        }
+
+
+        public function ver_contas_apagar(){
             $sql= new Sql();
             $sql->conn_bd();
             $g = new Glob();

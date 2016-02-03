@@ -3,6 +3,7 @@ include("restrito.php");
 include_once("../includes/functions.php");
 include_once("../model/class_cliente.php");
 include_once("../model/class_conta_bd.php");
+include_once("../model/class_parcelas_bd.php");
 include_once("../model/class_plano_conta.php");
 include_once("../includes/util.php");
 
@@ -30,7 +31,8 @@ $(document).ready(function(){
         $("#voltar1").fadeToggle();
     });
     
-    $("#tipo_data_vencimento").change(function(){
+    
+    $("#tipo_data_vencimento").change(function(){        
          var tipo = $("#tipo_data_vencimento").val();
          var parcelas = $("#parcelas").val();
         
@@ -44,9 +46,23 @@ $(document).ready(function(){
 //        $("#voltar3").fadeToggle();
     });
     
- 
     
+    $("#tipo_data_vencimento_r").change(function(){
+        
+         var tipo = $("#tipo_data_vencimento_r").val();
+         var parcelas = $("#parcelas_r").val();
+        
+       
+        var url = '../ajax/ajax_tipo_data_vencimento?tipo='+tipo+'&parcelas='+parcelas;  //caminho do arquivo php que irá buscar as cidades no BD
+			          $.get(url, function(dataReturn) {
+			            $('#tipo_data_r').html(dataReturn);  //coloco na div o retorno da requisicao
+			          });
+//        
+        $("#tipo_data_r").show();
+//        $("#voltar3").fadeToggle();
+    });
     
+  
     
      $("#vr").click(function(){
         var url = '../ajax/ajax_editar_conta?tipo=areceber';  //caminho do arquivo php que irá buscar as cidades no BD
@@ -117,6 +133,7 @@ $(document).ready(function(){
     
 function fechaParcela() {    
     $("#tipo_data").hide();
+    $("#tipo_data_r").hide();
 }
     
 
@@ -155,100 +172,107 @@ function fechaParcela() {
                
             <?php
             $contas = new Contas();
+            $clsparcelas = new Parcelas();
             $parcelas = array();
+            $err = 0;
             
-            if(isset($_POST['apagar_areceber']) && $_POST['apagar_areceber'] != "" ){
+        if(isset($_POST['apagar_areceber']) && $_POST['apagar_areceber'] != "" ){
+            
+            foreach ($_POST as $key => $value) {
                 
-                foreach ($_POST as $key => $value) {                          
+                for($i = 1; $i<= $_POST['parcelas']; $i++){
+                   
+                    if($key == "parcela".$i ){     
                     
-                    
-                        
-                    for($i = 1; $i<= $_POST['parcelas']; $i++){
-                        if($key == "parcela".$i ){                        
-                        $parcelas[$i] = $value;
-                        };                        
+                      $parcela[$i] = $value;                      
+
                     }
-                    
-                    if($key = "apagar_areceber"){
-                        echo $tipo = $value;
-                    }
-                    
-                    if($key == "cod"){
-                        echo $cod = $value;                        
-                    }
-                    if($key == "desc"){
-                       echo  $descricao = $value;                        
-                    }
-                    if($key == "obra"){
-                        echo $obra = $value;                        
-                    }
-                    if($key == "banco"){
-                        echo $banco = $value;                        
-                    }
-                    if($key == "plano"){
-                        echo $plano = $value;                        
-                    }
-                    if($key == "valor"){
-                        echo $valor = $value; 
-                        $source = $array('.',',','R$');
-                        $replace = $array('','.','');
-                        $valor = str_replace($source, $replace, $value);
-                    }
-                    if($key == "multa"){
-                        echo $nulta = $value;;
-                         $source = $array('.',',','R$');
-                         $replace = $array('','.','');
-                         $multa = str_replace($source, $replace, $value);
-                    }
-                    if($key == "juros"){
-                        echo $juros = $value;;
-                        $source = $array('.',',','R$');
-                        $replace = $array('','.','');
-                        $juros = str_replace($source, $replace, $value);
-                        
-                    }
-                    if($key == "periodo_juros"){
-                        echo $periodo_juros = $value;                        
-                    }
-                    if($key == "apagar_areceber"){
-                        echo $apagar_areceber = $value;                        
-                    }
-                    if($key == "select_fornecedor_cliente"){                        
-                       echo  $fornecedor = $value;                        
-                    }                                  
                 }
-                    $id_empresa = $_SESSION['id_empresa'];  
-                      
-                         
-                         
-                         
-                        echo $periodo_juros;
-                         
+          
+                
+                if($key == "cod"){
+                    $cod = $value;
+                    }
+                    
+                    if($key == "select_fornecedor_cliente"){
+                    $fornecedor = $value;                       
+                    }
+                    
+                    if($key == "banco"){
+                        $banco = $value;
+                    }
+                    
+                    if($key == "valor"){
+                    $valor = $value;
+                    }
+                    
+                    if($key == "tipo_de_pagamento"){
+                        $tipo_de_pagamento = $value;
+                    }
+                               
+            }
+            
+            
+                
+                $contas = new Contas();
+                $tipo_a_p = $_POST['apagar_areceber'];
+                $descricao = $_POST['desc'];
+                $obra = $_POST['obra'];
+                $plano = $_POST['plano'];
+                $id_parcela = 0;              
+                $multa = $_POST['multa'];
+                $juros = $_POST['juros'];
+                $periodo_juros = $_POST['periodo_juros'];  
+                
+                if($cod == ""){
+                    $err++;
+                }
+                if($banco == ""){
+                    $err++;
+                }
+                if($valor == ""){
+                    $err++;
+                }
+//                if($tipo_de_pagamento == 0){
+//                    $err++;
+//                }
+              
+                if($err == 0){     
+                    
+                    $contas->add_contas($cod, $descricao, $fornecedor, $obra, $plano, $banco, $valor, $id_parcela, $tipo_de_pagamento, $multa, $juros, $periodo_juros, $tipo_a_p, $id_empresa);
+                    $contas->add_contas_bd();
+                    $ultima_conta = $contas->get_ultima_conta();
+                    
+                    
+                    
+                    if($_POST['parcelas'] > 1 && $_POST['tipo'] == 1 ){
                         
-//                         if(isset($cod) && $cod != "" && isset($valor) && $valor != "" && isset($data) && $data != "" && isset($banco) && $banco != ""){
-//               
-//                         $contas->add_contas($cod, $desc, $id_fornecedor, $obra, $banco, $valor, $multa, $data, $id_parcelas, $juros, $periodo_juros, $tipo, $id_empresa);
-//                      
-////                         $contas->add_contas_bd();
-//                         }else {
-//                             
-//                             echo '<div class="msg">Por favor preencha os seguintes campos : <br>';
-//                             $err = 0;                            
-//                             
-//                             if($cod == ""){
-//                                 echo 'Codigo<br>';                                 
-//                             }
-//                             if($valor == ""){
-//                                 echo 'Valor<br>';
-//                             }
-//                             if($data == ""){
-//                                 echo 'Data<br>';
-//                             }
-//                             if($banco == ""){
-//                                 echo 'Banco<br>';
-//                             }
-//                         }
-            }       
+                        for($i = 1; $i<= $_POST['parcelas']; $i++){
+
+                             $comprovante = "";
+                             $clsparcelas->add_parcelas($ultima_conta, $parcela[1], $i, $comprovante);
+                             $clsparcelas->add_parcelas_bd();
+
+                        }
+                    }else{
+                         for($i = 1; $i<= $_POST['parcelas']; $i++){
+
+                         $comprovante = "";
+                         $clsparcelas->add_parcelas($ultima_conta, $parcela[$i], $i, $comprovante);
+                         $clsparcelas->add_parcelas_bd();
+
+                        }
+                    }
+                    
+                   
+                
+                }else{
+                    echo "<script>alert('dados a serem preenchidos')</script>";
+                    echo "<script>window.history.back()</script>";
+                }
+           
+        }
+     
             ?>
                   
                <div style="margin-top:50px; background-color:rgba(50,200,50,0.3); "><span style="font-family: sans-serif; font-size: 20pt;">Cadastrar Contas</span></div>
@@ -269,13 +293,13 @@ function fechaParcela() {
                        </tr>
                        <tr><td><span>Forncedor:</span></td><td>
                                   <select id="select_fornecedor" name="select_fornecedor_cliente"  style="width:100%" title="Selecione o fornecedor">
-                                    <option value="no_sel">Selecione</option>
-                                    <option value="sem_fornecedor">SEM FORNECEDOR</option>
+                                    <option name="select_fornecedor_cliente" value="no_sel">Selecione</option>
+                                    <option name="select_fornecedor_cliente" value="sem_fornecedor">SEM FORNECEDOR</option>
                                     <?php 
                                        $fornecedor = new Cliente();
                                        $fornecedor = $fornecedor->get_all_fornecedor();
                                        for ($i=0; $i < count($fornecedor) ; $i++) { 
-                                          echo '<option value="'.$fornecedor[$i][0].'">'.$fornecedor[$i][1].'</option>';
+                                          echo '<option name="select_fornecedor_cliente" value="'.$fornecedor[$i][0].'">'.$fornecedor[$i][1].'</option>';
                                        }
                                      ?>
                                  </select></td> 
@@ -323,14 +347,14 @@ function fechaParcela() {
                        <tr>
                            <td><span>Data de vencimento</span></td>
                             <td>
-                                <select id="tipo_data_vencimento">
-                                    <option value="0">Selecione</option>
-                                    <option id="tipo" value="1">Mensal</option>
-                                    <option id="tipo" value="2">Quinzena</option>                                            
+                                <select name="tipo" id="tipo_data_vencimento">
+                                    <option value="no_sel">Selecione</option>
+                                    <option id="tipo" value="1">Mensal</option>                                                                              
                                     <option id="tipo" value="3">Inserir data por parcela</option>
                                 </select>
                             </td>    
-                            <td><span>Tipo de pagamento</span></td><td><select id="tipo_de_pagamento">
+                            <td><span>Tipo de pagamento</span></td><td>
+                                <select id="tipo_de_pagamento" name="tipo_de_pagamento">
                                     <option value="0">Selecione</option>
                                     <option id="tipo" value="Boleto">Boleto</option>
                                     <option id="tipo" value="Cartão">Cartão</option>                                            
@@ -363,77 +387,124 @@ function fechaParcela() {
                    </form>
               </div>
                 
+               
+               
                <div hidden="on" id="formulario-areceber">
                    
                    <div class="title"><h3>À Receber</h3></div>
-                   <form method="Post" action="add_contas.php">
+                   
+                   
+                   
+                       <form method="Post" action="add_contas.php">
                        
-                       <input type="hidden" value="2" name="apagar_areceber" id="apagar_areceber">
+                       <input type="hidden" value="2" id="apagar_areceber" name="apagar_areceber">
                        
                        <table style="width:100%;">
                        <tr>
                            <td><span>Código:</span></td><td><input type="text" id="cod" name="cod"></td>
                            <td><span>Descrição:</span></td><td><textarea id="desc" name="desc"></textarea></td>
                        </tr>
-                       
-                        <tr><td><span>Cliente:</span></td><td>
+                       <tr><td><span>Cliente:</span></td><td>
                                   <select id="select_fornecedor" name="select_fornecedor_cliente"  style="width:100%" title="Selecione o fornecedor">
-                                    <option value="no_sel">Selecione</option>
+                                    <option name="select_fornecedor_cliente" value="no_sel">Selecione</option>
+                                    <option name="select_fornecedor_cliente" value="sem_cliente">Sem Cliente</option>
                                     <?php 
                                        $fornecedor = new Cliente();
                                        $fornecedor = $fornecedor->get_all_cliente();
                                        for ($i=0; $i < count($fornecedor) ; $i++) { 
-                                          echo '<option value="'.$fornecedor[$i][0].'">'.$fornecedor[$i][1].'</option>';
+                                          echo '<option name="select_fornecedor_cliente" value="'.$fornecedor[$i][0].'">'.$fornecedor[$i][1].'</option>';
                                        }
                                      ?>
                                  </select></td> 
-                                 <td><span>Sem Cliente</span></td><td><input type="checkbox" name='sem_fornecedor_cliente' type="fornecedor não consta no cadastrado"></td>
+                                 
                        </tr>
                        <tr>
                            <td colspan="2"><span>Pagamento relacionado a obra:</span></td>
-                           <td style="width: 100px;">
+                            <td>
                         <select name='obra' id='obra'>
                            <option value='obrax'>Obra x</option> 
                             <option value='obray'>Obra y</option>
                         </select>
                             </td>
                        </tr>
-                     <tr>
-                         <td>
+                     
+                        <tr>
+                           <td colspan="2"><span>Plano de Contas:</span></td>
+                            <td>
+                        <select name='plano' id='plano'>                          
+                              <?php
+                                $plano_deconta = new PlanoConta();
+                                $array = $plano_deconta->get_all_PlanoConta();
+                                foreach ($array as $key => $value) {
+                                     echo "<option value=".$value->id.">".$value->nome."/".$value->codigo."</option>";
+                                }
+                                
+                            ?>
+                        </select>
+                            </td>
+                       </tr>
+                       
+                       <tr>
+                            <td>
                            <span>Banco</span></td>
                             <td>
                                 <input type="text" name='banco' id='banco' >                          
-                            </td>
-                            <td><span>Data do vencimento: </span></td>
-                            <td><input type="date" name="data" id="data"></td>
+                            </td>                            
                        </tr>
                        <tr>                                             
                            <td><span>Valor: </span></td>
                            <td><input onkeyup="mascara(this, mvalor);" type="text" name="valor" id="valor"></td>
                            <td><span>N° Parecelas: </span></td>
-                           <td><input type="number" value="1" onchange="confereNegativos()" name='parcelas' id="parcelas"></td>
-                           
-                           
+                           <td><input type="number" value="1" onchange="confereNegativos()" name='parcelas' id="parcelas_r"></td>
                        </tr>
                        <tr>
+                           <td><span>Data de vencimento</span></td>
+                            <td>
+                                <select name="tipo" id="tipo_data_vencimento_r">
+                                    <option value="no_sel">Selecione</option>
+                                    <option id="tipo" value="1">Mensal</option>                                                                              
+                                    <option id="tipo" value="3">Inserir data por parcela</option>
+                                </select>
+                            </td>    
+                            <td><span>Tipo de pagamento</span></td><td>
+                                <select id="tipo_de_pagamento" name="tipo_de_pagamento">
+                                    <option value="0">Selecione</option>
+                                    <option id="tipo" value="Boleto">Boleto</option>
+                                    <option id="tipo" value="Cartão">Cartão</option>                                            
+                                    <option id="tipo" value="Crédito em Conta">Crédito em conta</option>
+                                    <option id="tipo" value="Cheque">Cheque</option>
+                                </select></td>
+                       </tr>
+                       <div id="tipo_data_r"></div> 
+                       <tr>
                            <td><span>Multa por Atraso:</span></td><td><input onkeyup="mascara(this, mvalor);" type="text" id="multa" name="multa"></td>
-                           <td><span>Juros:</span></td><td><input onkeyup="mascara(this, mvalor);" type="text" id="juros" name="juros"></td><td>
+                           <td><span>Juros:</span></td><td><input type="text" id="juros" name="juros" onkeyup="mascara(this, mvalor);"></td><td>
                                                                                             <select id="periodo_juros" name="periodo_juros" style="width: 100px;">
+                                                                                                <option value="anual">Diário</option>
                                                                                                 <option value="mensal">Mensal</option>
-                                                                                               <option value="anual">Anual</option>
-                                                                                                <option value="diaria">Ao dia</option>
-                                                                                            </select>
-                           </td>
+                                                                                                <option value="anual">Anual</option>
+                                                                                            </select></td>
                             
                        </tr>
                        
                        </table>
-                        <div id="editar" hidden="on" style="margin:0 auto; margin-top:30px;">
-                             <input type="hidden" type="atualizar" value="atualizar">
-                             <input type="button" class="button" value="Cancelar"><input class="button" type="submit" value="Guardar">
-                         </div>
-                        <div id="adicionar" style="margin:0 auto; margin-top:30px;"><input type="button" class="button" value="Cancelar"><input class="button" type="submit" value="Guardar"></div>
+                       
+                       <div  id="editar" hidden="on" style="margin:0 auto; margin-top:30px;">
+                           <input type="hidden" type="atualizar" value="atualizar">
+                           <input type="button" class="button" value="Cancelar"><input class="button" type="submit" value="Guardar">
+                       </div>
+                      
+                       
+                       <div id="adicionar" style="margin:0 auto; margin-top:30px;"><input type="button" class="button" value="Cancelar"><input class="button" type="submit" value="Guardar"></div>
+                  
                    </form>
+                   
+                   
+ 
+                   
+                   
+                   
+                   
                </div> 
                
                 <div class="col-5">

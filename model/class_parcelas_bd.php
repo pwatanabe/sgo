@@ -10,12 +10,12 @@ class Parcelas{
     public $parcela_n;
     public $comprovante;
         
-        public function add_parcelas($id_conta, $data, $parcela_n, $comprovante){
+        public function add_parcelas($id_conta, $data, $parcela_n){
         
             $this->id_conta = $id_conta;
             $this->data = $data;
-            $this->parcela_n = $parcela_n;
-            $this->comprovante = $comprovante;
+            $this->parcela_n = $parcela_n;            
+            $this->id_empresa = $_SESSION['id_empresa'];
         }
         
         public function add_parcelas_bd(){
@@ -24,12 +24,12 @@ class Parcelas{
                 $g = new Glob();
   
             
-                Parcelas::confere_ultimaparcela($this->id_conta);
+//                Parcelas::confere_ultimaparcela($this->id_conta);
                 
                 
-                $query = "INSERT INTO parcelas (id_conta, data, parcela_n, comprovante) 
-		                     VALUES ( '%s',     '%s',   '%s',  '%s')";
-                if($g->tratar_query($query, $this->id_conta, $this->data, $this->parcela_n, $this->comprovante)){                    
+                $query = "INSERT INTO parcelas (id_conta, data, parcela_n, id_empresa) 
+		                     VALUES ( '%s', '%s',   '%s', '%s')";
+                if($g->tratar_query($query, $this->id_conta, $this->data, $this->parcela_n, $this->id_empresa)){                    
                     return true;
 		}else{
                     return false;

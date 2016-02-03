@@ -1,10 +1,20 @@
-<?php  if($_GET['tipo'] == 1){ ?>
+<?php  if($_GET['tipo'] == 1){
     
-<div class="form" id="tipo_data">
-    <input type="date" id="data" name="data">
-</div>            
 
-<?php }if($_GET['tipo'] == 2){?>
+echo '<div style="position: absolute; z-index: 2;  background-color: rgb(240, 245, 230); border: 1px solid#aaa; border-radius: 10px; margin-bottom: 20px; transition: all 2s; padding: 20px; box-shadow: 0px 0px 10px #aaa; float: left; " id="tipo_data">';
+   echo '<a style="float: right" href="add_contas#formulario-apagar" onclick="fechaParcela()">X</a>';
+   echo '<table><tr>';
+  
+    $parcelas = 1; 
+    
+        echo "<td><span>Parcela-".$parcelas."</span></td><td><input type='date' id='parcela".$parcelas."' name='parcela".$parcelas."' ></td>";
+        
+       
+    }echo '</tr></table>';
+    
+?>
+
+<?php if($_GET['tipo'] == 2){?>
 
     <div id="tipo_data">
         <input type="date" id="data_quinzena" name="data_quinzena">

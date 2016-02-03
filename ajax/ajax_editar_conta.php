@@ -87,6 +87,8 @@ $nome_comprovante  = "";
     ?> 
 <div id="visualizar-conta">
         <?php Functions::getPaginacao();?>
+    
+    
       <?php
                     if($_GET['tipo'] == 'apagar'){
                     $contas = new Contas();                    
