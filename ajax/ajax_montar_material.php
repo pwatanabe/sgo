@@ -79,6 +79,7 @@ include_once("../model/class_produto_bd.php");
 			          	if($id_qtd_tipo[2] == 'm'){// se for material
 				  		     $res = new Material();
 				  			 $res = Material::get_material_id($id_qtd_tipo[0]);
+				  			 if($res == false) continue;
 				         	 $uni = new Unidade_medida();
 							 $uni = $uni->get_unidade_medida_by_id($res->id_unidade_medida);
 				  			 echo '<td ><span>'.$res->nome.': </span></td><td><input  id="'.$res->id.':'.$id_qtd_tipo[1].':'.$id_qtd_tipo[2].'" onchange="increment(this.id)" style="width:70%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$id_qtd_tipo[1].'"> <span>'.$uni->sigla.'</span></td><td><a name="'.$res->id.':'.$id_qtd_tipo[1].':'.$id_qtd_tipo[2].'" style="cursor:pointer"  onclick="apagar(this.name,\'material\',\'cadastrar\')"><img style="width:15px" src="../images/delete.png"></a></td>';
@@ -137,6 +138,7 @@ include_once("../model/class_produto_bd.php");
 			          	if($id_qtd_tipo[2] == 'm'){// se for material
 				  		     $res = new Material();
 				  			 $res = Material::get_material_id($id_qtd_tipo[0]);
+				  			 if($res == false) continue;
 				         	 $uni = new Unidade_medida();
 							 $uni = $uni->get_unidade_medida_by_id($res->id_unidade_medida);
 				  			 echo '<td ><span>'.$res->nome.': </span></td><td><input  id="'.$res->id.':'.$id_qtd_tipo[1].':'.$id_qtd_tipo[2].'" onchange="increment(this.id,\'editar\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$id_qtd_tipo[1].'"> <span>'.$uni->sigla.'</span></td><td><a name="'.$res->id.':'.$id_qtd_tipo[1].':'.$id_qtd_tipo[2].'" style="cursor:pointer"  onclick="apagar(this.name,\'material\')"><img style="width:15px" src="../images/delete.png"></a></td>';

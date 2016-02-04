@@ -24,7 +24,7 @@ include_once("../model/class_regiao_bd.php");
            <table style="width:100%; text-align:center;" border="0">
               <tr><td colspan="3"><b>Materiais usados para '.$produto->nome.'</b></td></tr>';
               echo '<tr><td colspan="3"><div style="overflow-y:scroll; max-height:200px;">';
-              echo '<table style="text-align:center">';
+              echo '<table style="text-align:center; width:100%">';
               echo '<tr><td><b><span>Nome</span></b></td><td><b><span>Quantidade</span></b></td><td><b><span>Custo por regiao</span></b></td></tr>';
               for($aux = 0; $aux < count($materiais); $aux++){
               	$id_material = explode(':', $materiais[$aux][1]);
@@ -33,6 +33,7 @@ include_once("../model/class_regiao_bd.php");
 
 					$res = Material::get_material_id($id_material[0]);
 					$uni = new Unidade_medida();
+					if($res == false) continue;
 					$uni = $uni->get_unidade_medida_by_id($res->id_unidade_medida);
 					if(isset($_SESSION['obra']['dados']['regioes']) && $_SESSION['obra']['dados']['regioes'] != 'no_sel'){
 						
@@ -96,11 +97,11 @@ include_once("../model/class_regiao_bd.php");
             	</tr>
          </table>';
 	}else{
-		$nome = $_GET['nome'];  //codigo do estado passado por parametro
+		$nome = $_GET['nome'];  
 		$tipo = $_GET['tipo'];
-		if($tipo == 'm')//buscar materiais
+		if($tipo == 'm'){//buscar materiais
 			$res = Material::get_material_by_name($nome);
-		else if($tipo == 'p')// buscar produtos
+		}else if($tipo == 'p')// buscar produtos
 			$res = Produto::get_produto_by_name($nome);	
 		?>
 

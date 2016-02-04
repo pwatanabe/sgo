@@ -588,19 +588,19 @@ class Funcionario{
 			while($result =  mysql_fetch_array($query_tra)){
 				$return[$aux][0] = $result['id'];
 				$return[$aux][1] = $result['nome'];
-                                $return[$aux][2] = $result['cod_serie'];
-                                $return[$aux][3] = $result['salario_base'];
-                                $return[$aux][4] = $result['id_endereco'];
-                                $return[$aux][5] = $result['id_cbo'];
-                                $return[$aux][6] = $result['data_dem'];
-                                $return[$aux][7] = $result['qtd_horas_sem'];
-                                $return[$aux][8] = $result['data_fim'];
-                                $return[$aux][9] = $result['id_supervisor'];
-                                $return[$aux][10] = $result['id_turno'];
-                                $return[$aux][11] = $result['is_admin'];
-                                $return[$aux][12] = $result['email'];
-                                $return[$aux][13] = $result['data_ini'];
-	                        $return[$aux][14] = $result['id_valor_custo'];
+                $return[$aux][2] = $result['cod_serie'];
+                $return[$aux][3] = $result['salario_base'];
+                $return[$aux][4] = $result['id_endereco'];
+                $return[$aux][5] = $result['id_cbo'];
+                $return[$aux][6] = $result['data_dem'];
+                $return[$aux][7] = $result['qtd_horas_sem'];
+                $return[$aux][8] = $result['data_fim'];
+                $return[$aux][9] = $result['id_supervisor'];
+                $return[$aux][10] = $result['id_turno'];
+                $return[$aux][11] = $result['is_admin'];
+                $return[$aux][12] = $result['email'];
+                $return[$aux][13] = $result['data_ini'];
+				$return[$aux][14] = $result['id_valor_custo'];
 	                        
 	                        
 				$aux++;

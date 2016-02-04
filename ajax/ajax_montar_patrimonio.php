@@ -5,6 +5,7 @@ include_once("../model/class_maquinario_bd.php");
 include_once("../model/class_veiculo_bd.php");
 include_once("../model/class_patrimonio_geral_bd.php");
 include_once("../model/class_funcionario_bd.php");
+include_once("../model/class_obra_patrimonios.php");
 
 
 	
@@ -16,10 +17,11 @@ include_once("../model/class_funcionario_bd.php");
   //verifica se ainda não existe patrimonio cadastrado
 	if(!isset($_SESSION['obra']['patrimonio'])){
   		//obra recebe a concatenação do tipo:id:quantidade
-  		$_SESSION['obra']['patrimonio'][0] = $tipo.':'.$id.':1';
+  		
       if($tipo == 1){ //maquinario
             $res = Maquinario::get_maquinario_id($id);
-            
+            $_SESSION['obra']['patrimonio'][0] = $tipo.':'.$id.':1:'.$res->id_responsavel;
+
             if(Funcionario::verifica_func_id($res->id_responsavel)){ //verifica se existe esse responsavel cadastrado
                 $verifica = 0;
                 if(isset($_SESSION['obra']['funcionario'])){//verifica se existe algum funcionario cadastrado
@@ -37,6 +39,8 @@ include_once("../model/class_funcionario_bd.php");
             }
       }else if($tipo == 2){ //veiculos
             $res = Veiculo::get_veiculo_id($id);
+            $_SESSION['obra']['patrimonio'][0] = $tipo.':'.$id.':1:'.$res->id_responsavel;
+
             if(Funcionario::verifica_func_id($res->id_responsavel)){//verifica se existe esse responsavel cadastrado
                 $verifica = 0;
                 if(isset($_SESSION['obra']['funcionario'])){//verifica se existe algum funcionario cadastrado
@@ -54,6 +58,8 @@ include_once("../model/class_funcionario_bd.php");
                     $_SESSION['obra']['funcionario'][(isset($_SESSION['obra']['funcionario']))?count($_SESSION['obra']['funcionario']):0] = $res->id_responsavel;//adicionando na obra o funcionario responsavel pelo patrimonio
                 }
             }
+      }else{
+        $_SESSION['obra']['patrimonio'][0] = $tipo.':'.$id.':1';
       }
 	}else{
   		$total = count( $_SESSION['obra']['patrimonio'] );
@@ -67,10 +73,11 @@ include_once("../model/class_funcionario_bd.php");
       if($verifica > 0){
   		  echo '<script>alert("Você já adicionou esse patrimonio")</script>';
       }else{
-          $_SESSION['obra']['patrimonio'][$total] = $tipo.':'.$id.':1';
+          
           //verifica se é maquinario ou veiculo para adicionar seus respectivos responsaveis à obra
           if($tipo == 1){// maquinario
                 $res = Maquinario::get_maquinario_id($id);
+                $_SESSION['obra']['patrimonio'][$total] = $tipo.':'.$id.':1:'.$res->id_responsavel;
                 if(Funcionario::verifica_func_id($res->id_responsavel)){//verifica se existe esse responsavel cadastrado
                     $verifica = 0;
                     if(isset($_SESSION['obra']['funcionario'])){ //verifica se existe algum funcionario cadastrado
@@ -89,6 +96,7 @@ include_once("../model/class_funcionario_bd.php");
                 }
           }else if($tipo == 2){//veiculos
                 $res = Veiculo::get_veiculo_id($id);
+                $_SESSION['obra']['patrimonio'][$total] = $tipo.':'.$id.':1:'.$res->id_responsavel;
                 if(Funcionario::verifica_func_id($res->id_responsavel)){//verifica se existe esse responsavel cadastrado
                     $verifica = 0;
 
@@ -105,6 +113,8 @@ include_once("../model/class_funcionario_bd.php");
                           $_SESSION['obra']['funcionario'][(isset($_SESSION['obra']['funcionario']))?count($_SESSION['obra']['funcionario']):0] = $res->id_responsavel;//adicionando na obra o funcionario responsavel pelo patrimonio
                     }
                 }
+          }else{
+              $_SESSION['obra']['patrimonio'][$total] = $tipo.':'.$id.':1';
           }
       }
 	}
@@ -121,16 +131,18 @@ include_once("../model/class_funcionario_bd.php");
            echo '<tr style="background-color:#ccc;">';
       else
           echo '<tr style="background-color:#ddd;">';
-  		if($tipo_id_qtd[0] == 0){
-  			 $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
-  			 echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id,\'patrimonio\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-  		}else if($tipo_id_qtd[0] == 1){
-  			 $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
-         echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id,\'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-  		}else{
-  			 $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
-  			 echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id,\'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-  		}
+
+      Obra_patrimonios::imprimePatrimonios($tipo_id_qtd);
+  		// if($tipo_id_qtd[0] == 0){
+  		// 	 $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
+  		// 	 echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id,\'patrimonio\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+  		// }else if($tipo_id_qtd[0] == 1){
+  		// 	 $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
+    //      echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id,\'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+  		// }else{
+  		// 	 $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
+  		// 	 echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id,\'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+  		// }
   		echo '</tr>';
   		// if(count($patrimonio)>1)
   		// 	for($aux = 0; $aux < count($patrimonio); $aux++ ){

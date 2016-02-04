@@ -2159,7 +2159,17 @@ Class Functions{
 			<script type="text/javascript">
 
 
-
+					function busca_funcionarios_disponiveis(id_popup, exibe, id_patrimonio){
+						if(exibe == 1){
+							document.getElementById('back-pop').style.display = "block";
+							$("#"+id_popup).removeClass("oculta");
+							$("#"+id_popup).addClass("exibe");
+						}else{
+							document.getElementById('back-pop').style.display = "none";
+							$("#"+id_popup).removeClass("exibe");
+							$("#"+id_popup).addClass("oculta");
+						}
+					}
 
 
 					function ajusta(id, tipo){

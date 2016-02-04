@@ -54,6 +54,20 @@ class Obra_patrimonios{
 		return $return;
 
 	}
+	public function imprimePatrimonios($tipo_id_qtd){
+		
+           if($tipo_id_qtd[0] == 0){
+              $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
+              echo '<td title="Descrição: '.$res->descricao.'"><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id, \'patrimonio\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+           }else if($tipo_id_qtd[0] == 1){
+              $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
+              echo '<td ><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+           }else{
+              $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
+              echo '<td title="Matricula: '.$res->matricula.' | Placa: '.$res->placa.'"><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+           }
+                
+	}
 	
 }
 

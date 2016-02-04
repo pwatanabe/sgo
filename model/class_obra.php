@@ -71,11 +71,11 @@ class Obra{
 
  		mysql_query($query.$campos.$valores) or print (mysql_error());
 
- 		$result = mysql_query("SELECT id FROM obras ORDER BY id DESC");
+ 		$result = mysql_query("SELECT id_tabela FROM obras ORDER BY id DESC");
  		
  		$row = mysql_fetch_array($result);
- 		if(!empty($row['id']))
- 			return $row['id'];
+ 		if(!empty($row['id_tabela']))
+ 			return $row['id_tabela'];
 
  		return null;
  	}

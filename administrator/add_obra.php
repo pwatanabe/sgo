@@ -15,6 +15,7 @@ include_once("../includes/functions.php");
 include_once("../includes/util.php");
 include_once("../model/class_regiao_bd.php");
 include_once("../model/class_obra.php");
+include_once("../model/class_obra_patrimonios.php");
 
 function validate(){
    if(!isset($_POST['desc']) || $_POST['desc'] == ""){
@@ -164,7 +165,7 @@ function validate(){
             <div style="margin-left: -800px; transition-duration: 0.8s; position: absolute; width:700px; height: 500px; z-index: 2; border: 1px solid#fff" id="map"></div>    
   
 
-            <div class="formulario" style="width:43%;" id="form_obra">
+            <div class="formulario" style="width:43%; min-width:650px" id="form_obra">
               <div class="title-box" style="float:left;width:100%"><div style="float:left"><img src="../images/add.png" width="35px" style="margin-left:5px;"></div><div style="float:left; margin-top:10px; margin-left:10px;"><span class="title">NOVA OBRA</span></div></div>
               
               <div id="popup" class="popup" style="float:left; width:380px; position:absolute">
@@ -474,16 +475,18 @@ function validate(){
                                                                echo '<tr style="background-color:#ccc;">';
                                                             else
                                                               echo '<tr style="background-color:#ddd;">';
-                                                            if($tipo_id_qtd[0] == 0){
-                                                               $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
-                                                               echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id, \'patrimonio\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                                                            }else if($tipo_id_qtd[0] == 1){
-                                                               $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
-                                                               echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                                                            }else{
-                                                               $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
-                                                               echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                                                            }
+                                                            // if($tipo_id_qtd[0] == 0){
+                                                            //    $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
+                                                            //    echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id, \'patrimonio\')" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                                                            // }else if($tipo_id_qtd[0] == 1){
+                                                            //    $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
+                                                            //    echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                                                            // }else{
+                                                            //    $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
+                                                            //    echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id, \'patrimonio\')" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                                                            // }
+                                                            Obra_patrimonios::imprimePatrimonios($tipo_id_qtd);
+
                                                             echo '</tr>';
 
                                                         }
@@ -717,7 +720,45 @@ function validate(){
             <?php   } ?>
 
 	 	    </div>
-         <div class="formulario" style="width:43%;">
+        <style type="text/css">
+             .popup-padrao{
+                 background-color: #cdcdcd;
+                 position: fixed;                                    
+                 z-index: 100px;
+                 margin-top: 20%;
+                 box-shadow: 0px 0px 10px;
+                 padding-right: 10px;
+
+             }
+             .back-pop{
+               width: 100%;
+               height: 100%;
+               margin-top: -8px;
+               margin-left: -8px;
+               z-index: 90px;
+               background-color: rgba(10,10,10,0.5);
+               position: fixed;
+               display: none;
+
+             }
+             .oculta{
+                margin-left: -42%;
+                transition: all 2s;
+             }
+             .exibe{
+                margin-left: 32%;
+                transition: all 2s;
+             }
+         </style>
+         <div class="back-pop" id="back-pop">
+             <div class="popup-padrao oculta" id="altera_resp" >
+                  <div class="formulario">
+                       <input type="text">
+                       <a onclick="busca_funcionarios_disponiveis('altera_resp',0)">oculta</a>
+                  </div>
+             </div>
+         </div>
+         <div class="formulario" style="width:43%;min-width:650px">
             <div class="bloco-1">
                 <div class="form-input">
                     <div class="form-input"><b>DADOS DO CADASTRAMENTO</b></div>
@@ -725,7 +766,7 @@ function validate(){
                           echo '<div class="form-input">(ORÇAMENTO)</div>';
                           
                     } ?>
-
+                    
                 </div>
                 <div class="body-bloco">
                   <?php if(isset($_SESSION['obra']['cliente'])){?>
@@ -810,6 +851,7 @@ function validate(){
                             </div>
                    <?php } ?>
                    <?php if(isset($_SESSION['obra']['patrimonio']) && count($_SESSION['obra']['patrimonio']) > 0){?>
+
                             <div class="form-input" style="border-bottom: 1px solid#aaa">
                                   <span style="margin-left:10px;"><b>Patrimonios/Obra</b></span> <span><a name="btn_pat_obra" id="btn_pat_obra" onclick="expand('pat_obra',this.id)" style="cursor: pointer; color:#773333">(Ocultar)</a></span>
                             </div>
@@ -832,14 +874,14 @@ function validate(){
                                                     $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
                                                     $func_res = Funcionario::get_nome_by_id($res->id_responsavel);
                                                     // echo '<li style="margin-left:10px;"><span>'.$res->modelo.': </span><input readonly style="width:30%; border: 0" type="number" value="'.$tipo_id_qtd[2].'"></li>';
-                                                    echo '<td style="padding: 3 10 3 10px;"><span>'.$res->modelo.' / '.$func_res[0].' </span></td><td style="padding: 3 10 3 10px;"><span>'.$tipo_id_qtd[2].'</span></td>';
+                                                    echo '<td style="padding: 3 10 3 10px;"><span>'.$res->modelo.' / <a href="#" onclick="busca_funcionarios_disponiveis(\'altera_resp\',\'1\',\''.$res->id.'\')">'.$func_res[0].'</a> </span></td><td style="padding: 3 10 3 10px;"><span>'.$tipo_id_qtd[2].'</span></td>';
                                                  }else{
                                                     $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
                                                     // echo "<script>alert('".$res->id_responsavel."');</script>";
                                                     $func_res = Funcionario::get_nome_by_id($res->id_responsavel);
                                                     // if($func_res !=){
                                                       // echo '<li style="margin-left:10px;"><span>'.$res->modelo.': </span><input readonly style="width:30%; border: 0" type="number" value="'.$tipo_id_qtd[2].'"></li>';
-                                                      echo '<td style="padding: 3 10 3 10px;"><span>'.$res->modelo.' / '.$func_res[0].' </span></td><td style="padding: 3 10 3 10px;"><span>'.$tipo_id_qtd[2].'</span></td>';
+                                                      echo '<td style="padding: 3 10 3 10px;"><span>'.$res->modelo.' / <a  onclick="busca_funcionarios_disponiveis(\'altera_resp\',\'1\',\''.$res->id.'\')" title="Clique para alterar o funcionário responsável" href="#">'.$func_res[0].'</a> </span></td><td style="padding: 3 10 3 10px;"><span>'.$tipo_id_qtd[2].'</span></td>';
                                                     // }
                                                  }
                                                  echo '</tr>';

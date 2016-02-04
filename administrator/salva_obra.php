@@ -9,7 +9,7 @@ include_once("../model/class_obra_funcionarios.php");
      $obra_dados = new Obra();
      $obra_dados->add_dados_obra();
      $id_obra = $obra_dados->add_dados_obra_bd();
-     if($id_obra) echo 'Sucesso<br />';
+     if($id_obra) echo "Sucesso $id_obra<br />";
      //adiciona obra no banco e pega id_obra
      echo '<hr>';
      echo '<br />';

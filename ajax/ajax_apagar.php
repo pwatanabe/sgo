@@ -8,6 +8,7 @@ include_once("../model/class_funcionario_bd.php");
 include_once("../model/class_material_bd.php");
 include_once("../model/class_unidade_medida_bd.php");
 include_once("../model/class_produto_bd.php");
+include_once("../model/class_obra_patrimonios.php");
 	
 	$id = $_GET['id'];  //codigo do array passado por parametro
 	$whatarray = $_GET['whatarray'];// que array? especifica em qual array sera feita a exclusão: funcionario, patrimonio
@@ -121,16 +122,17 @@ include_once("../model/class_produto_bd.php");
                             //$_SESSION['obra']['patrimonio'][$aux] = 'qtd:id:tipo';
                             $tipo_id_qtd = explode(':', $_SESSION['obra'][$whatarray][$aux]);
 
-                            if($tipo_id_qtd[0] == 0){
-                               $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
-                               echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id)" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                            }else if($tipo_id_qtd[0] == 1){
-                               $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
-                               echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id)" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                            }else{
-                               $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
-                               echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id)" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
-                            }
+                            // if($tipo_id_qtd[0] == 0){
+                            //    $res = Patrimonio_geral::get_patrimonio_geral_id($tipo_id_qtd[1]);
+                            //    echo '<td ><span>'.$res->nome.': </span></td><td><input  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'" onchange="increment(this.id)" style="width:30%; background-color: rgba(230,230,230,0.5)" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                            // }else if($tipo_id_qtd[0] == 1){
+                            //    $res = Maquinario::get_maquinario_id($tipo_id_qtd[1]);
+                            //    echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id)" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                            // }else{
+                            //    $res = Veiculo::get_veiculo_id($tipo_id_qtd[1]);
+                            //    echo '<td><span>'.$res->modelo.': </span></td><td><input readonly  id="qtd:'.$res->id.':'.$tipo_id_qtd[0].'"  onchange="increment(this.id)" style="width:30%" type="number" value="'.$tipo_id_qtd[2].'"></td><td><a style="cursor:pointer" name="'.$tipo_id_qtd[0].':'.$res->id.':'.$tipo_id_qtd[2].':'.$res->id_responsavel.'" id="'.$res->id.'" onclick="apagar(this.name,\'patrimonio\')"><img style="width:15px" src="../images/delete.png"></a></td>';
+                            // }
+                            Obra_patrimonios::imprimePatrimonios($tipo_id_qtd);
                         }else if($whatarray == 'funcionario'){ // se for funcionario exibe funcionarios
                             $res = Funcionario::get_func_id($_SESSION['obra'][$whatarray][$aux]);
                             echo '<td ><span>'.$res->nome.': </span></td><td style="text-align:center"><a id="'.$res->id.'" style="cursor: pointer" onclick="apagar(this.id,\''.$whatarray.'\')"><img style="width:15px" src="../images/delete.png"></a></td>';          
