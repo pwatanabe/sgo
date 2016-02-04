@@ -167,6 +167,7 @@ class Funcionario{
 
 		 $func = new Funcionario();
 		 if(@mysql_num_rows($result) == 0){
+                     
             return false;
 	     }else{
 
