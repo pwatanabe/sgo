@@ -21,12 +21,14 @@ $data = "";
 $parcela_n = "";
 $nome_comprovante  = "";
 
-     
+print_r($_POST);
 
 
     if(isset($_FILES['arquivo']) && $_FILES['arquivo']['name'] != '' ){
-          $nome_comprovante = $_FILES['arquivo']['name'];
+         $nome_comprovante = $_FILES['arquivo']['name'];
         
+      
+       
           $id = $_POST['id'];
           if(isset($_FILES['arquivo'])){
                         $uploaddir = "../images/".$_SESSION['id_empresa']."/comprovantes/".$id."/";
@@ -39,18 +41,17 @@ $nome_comprovante  = "";
                         if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $uploadfile)) {
                                     echo "Arquivo válido e enviado com sucesso.\n";                                
                          }
-                       
-  
-        }
-    }
+                   }
+             }
     
     if(isset($_POST['enviacomprovante'])){
     
-    
-    $parcelas = new Parcelas(); 
-    $parcelas->updateComprovante($_POST['id'],$_POST['parcela'],$_POST['data'],$nome_comprovante);
+        $parcelas = new Parcelas();        
+        $parcelas->updateComprovante($_POST['id'],$_POST['parcela_n'],$nome_comprovante);
    
-}  
+    }  
+
+
     
    if(isset($_POST['parcela'])){
        
@@ -115,6 +116,7 @@ $nome_comprovante  = "";
                     }
                     
                     $style1 = 'background-color: rgba(50,200,50,0.3);';
+                    $style2 = 'background-color: rgba(25,100,25,0.3);';
                     $i = 0;
                     ?>
                    
@@ -128,7 +130,7 @@ $nome_comprovante  = "";
                     
                    ?>
                     
-                    <div id="contas" class="tabela-contas-apagar" style="<?php  if($i % 2 == 1){echo $style1;} ?> ">                               
+                    <div id="contas" class="tabela-contas-apagar" style="<?php  if($i % 2 == 1){echo $style1;}else{ echo $style2;} ?> ">                               
                         <div  id="<?php echo $i ?>" >                             
                             <input type="hidden" id="id" name="id" value="<?php echo $value->id ?>">
                                 <div  class="row">                                     
@@ -148,7 +150,7 @@ $nome_comprovante  = "";
                                         
                                     </div>
                                 </div>
-                                 <div class="row">
+                            <div class="row">
                                      <div class="center">                                         
                                           <div class="col-5">
                                              <div class="item"><label>Banco: </label> <label><?php echo $value->banco ?></label></div>
@@ -156,9 +158,7 @@ $nome_comprovante  = "";
                                         <div class="col-5">
                                              <div class="item"><label>Obra: </label> <label><?php echo $value->obra ?></label></div>
                                         </div>
-                                         <div class="col-10">
-                                             <div class="item"><label>Clique na data que deseja deseja enviar comprovante e considerar paga: </label></div>
-                                        </div>
+                                        
                                          
                                          
                                         <?php 
@@ -167,27 +167,31 @@ $nome_comprovante  = "";
                                         $lista = array();
                                         
                                         $lista[] = $parcelas->get_parcelas($value->id);
-                                        $color = "#ffffff";
-                                        $color2 = "#cccccc";
-                                        $i = 1;
-                                        foreach ($lista[0][1] as $key => $data) {                                           
-                                            ?>
+                                        $color = "#cccccc";
                                         
+                                        $j = 1;
+                                        if($lista[0][1] != ""){
+                                            echo ' <div class="col-10">
+                                             <div class="item"><label>Escolha um arquivo e envie para deixar a data paga: </label></div>
+                                             </div>';
+                                            foreach ($lista[0][1] as $key => $data) {                                           
+                                                ?>
+                                         <div class="col-4" style="<?php echo "background-color:".$color.""; ?>; padding: 5px; border:solid 1px;">
+                                                <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >        
+                                                     <table style="cursor: pointer; margin: 10px;">
+                                                           <input type="hidden" name="enviacomprovante">
+                                                           <input type="hidden" name="id" value="<?php echo $value->id; ?>">
+                                                        <tr><td><label>Parcela: </label></td><td><input style="background-color: #cccccc; border: 0; " name="parcela_n" type="text" readonly value="<?php echo $j; ?>"></td></tr>
+                                                        <tr><td><label>Data: </label></td><td><input style="background-color: #cccccc; border: 0; " name="data" readonly type="text" value="<?php echo data_padrao_brasileiro($data); ?>"></td><tr>
+                                                        <tr><td><label>Comprovante: </label></td><td><input type="file" name="arquivo" id='arquivo'></td></tr>
+                                                        <tr><td><label>Observação</label></td><td><textarea style="min-height: 60px; max-height: 150px; min-width:290px; max-width: 290px;" name="observacao" id="observacao" placeholder="Conta paga antecipada.. atrasada.. e informações gerais." ></textarea></td></tr>
+                                                        <tr><td><input type="submit" class="button" id="salvar" value="Pagar"></td></tr>                                                        
+                                                    </table>
+                                                </form>
+                                            </div>
+                                          
                                          
-                                         
-                                         <div class="col-2" style="<?php if($i % 2 == 0){ echo "background-color:".$color.""; }else{ echo "background-color:".$color2."";} ?>; cursor: pointer; ">
-                                            
-                                            <table>
-                                                <tr><td><label>Parcela: </label></td><td><label><?php echo $i ?></label></td></tr>
-                                                <tr><td><label>Data: </label></td><td><label><?php echo data_padrao_brasileiro($data); ?></label></td><tr>
-                                            </table>
-                                            
-                                        </div>
-                                            <?php 
-                                            $i++;
-                                        }
-                                        
-                                        ?> 
+                                                <?php  $j++; }}  ?> 
                                        
                                         
                                          
@@ -203,7 +207,7 @@ $nome_comprovante  = "";
                                         
                                          
                                         <?php
-                                        if(isset($value->status) && $value->status == 1 && isset($value->tipo) && $value->tipo == 1){ ?> 
+                                        if(isset($value->status) && $value->status == 1 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 1){ ?> 
                                          <div class="row">
                                              <div class="col-10">
                                                  <div class="item">
@@ -272,7 +276,7 @@ $nome_comprovante  = "";
                                          
                                          
 
-                                        <?php } if(isset($value->status) && $value->status == 1 && isset($value->tipo) && $value->tipo == 2){?> 
+                                        <?php } if(isset($value->status) && $value->status == 1 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 2){?> 
                                                                            <div class="row">
                                              <div class="col-10">
                                                  <div class="item">
@@ -350,7 +354,7 @@ $nome_comprovante  = "";
                                      </div>
                                  </div>
                                         <?php
-                                        if(isset($value->status) && $value->status == 0 && isset($value->tipo) && $value->tipo == 1){?>
+                                        if(isset($value->status) && $value->status == 0 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 1){?>
                                         <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
                                             <input type="hidden" name="parcela" id="parcela" value="parcela">
                                             <input type="hidden" name="id" id="id" value="<?php echo $value->id; ?>">

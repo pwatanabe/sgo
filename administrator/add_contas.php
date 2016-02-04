@@ -175,20 +175,40 @@ function fechaParcela() {
             $clsparcelas = new Parcelas();
             $parcelas = array();
             $err = 0;
+            $unicaData = "";
             
         if(isset($_POST['apagar_areceber']) && $_POST['apagar_areceber'] != "" ){
             
+                        
             foreach ($_POST as $key => $value) {
                 
-                for($i = 1; $i<= $_POST['parcelas']; $i++){
-                   
-                    if($key == "parcela".$i ){     
+                
+                
+               
+                
+                
+                if($_POST['tipo'] == 1 ){
                     
-                      $parcela[$i] = $value;                      
+                    
+                    
+                     if($key == "parcela1" ){     
 
-                    }
-                }
-          
+                         $unicaData = $value;                      
+                         
+                       }
+                 }else{
+                     echo "<script>alert('por data')</script>";
+                   for($i = 1; $i <= $_POST['parcelas']; $i++){
+
+                       if($key == "parcela".$i ){     
+
+                         $parcela[$i] = $value;                      
+
+                       }
+                   } 
+                 }
+                
+                
                 
                 if($key == "cod"){
                     $cod = $value;
@@ -245,17 +265,18 @@ function fechaParcela() {
                     
                     
                     
-                    if($_POST['parcelas'] > 1 && $_POST['tipo'] == 1 ){
+                    if($_POST['tipo'] == 1 ){
                         
-                        for($i = 1; $i<= $_POST['parcelas']; $i++){
+                        for($i = 1; $i <= $_POST['parcelas']; $i++){
 
                              $comprovante = "";
-                             $clsparcelas->add_parcelas($ultima_conta, $parcela[1], $i, $comprovante);
+                             echo "<script>alert(".$unicaData.")</script>";
+                             $clsparcelas->add_parcelas($ultima_conta, $unicaData, $i, $comprovante);
                              $clsparcelas->add_parcelas_bd();
 
                         }
                     }else{
-                         for($i = 1; $i<= $_POST['parcelas']; $i++){
+                         for($i = 1; $i <= $_POST['parcelas']; $i++){
 
                          $comprovante = "";
                          $clsparcelas->add_parcelas($ultima_conta, $parcela[$i], $i, $comprovante);
