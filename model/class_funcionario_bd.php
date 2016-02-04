@@ -166,8 +166,7 @@ class Funcionario{
 		 $result = $g->tratar_query($query, $id, $data, $data);
 
 		 $func = new Funcionario();
-		 if(@mysql_num_rows($result) == 0){
-                     
+		 if(@mysql_num_rows($result) == 0){                     
             return false;
 	     }else{
 
