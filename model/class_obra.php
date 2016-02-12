@@ -88,6 +88,7 @@ class Obra{
  		$this->add_dados_obra();
 
  	}
+        
 
  	public function set_session($id_obra){
 		$sql = new Sql();
@@ -185,6 +186,26 @@ class Obra{
  		echo '</table>';
  		print_r($_SESSION['obra']);
  	}
+        
+        public function get_all_Obra(){
+            $sql = new Sql();
+            $sql->conn_bd();
+            $g = new Glob();
+
+            $query = "SELECT * FROM obras WHERE id_empresa=".$_SESSION['id_empresa']." && oculto = 0 ";
+
+            $result = mysql_query($query);
+
+            $array = array();
+
+            while ($row = mysql_fetch_array($result)){
+                $obra = new Obra();
+                $obra->id = $row['id'];
+                $obra->nome = $row['nome'];                
+                $array[] = $obra;
+            }
+            return $array;
+        }
 
  	public function getObraId($id){
  		$sql = new Sql();

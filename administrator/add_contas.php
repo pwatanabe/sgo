@@ -3,6 +3,7 @@ include("restrito.php");
 include_once("../includes/functions.php");
 include_once("../model/class_cliente.php");
 include_once("../model/class_conta_bd.php");
+include_once("../model/class_obra.php");
 include_once("../model/class_parcelas_bd.php");
 include_once("../model/class_plano_conta.php");
 include_once("../includes/util.php");
@@ -112,9 +113,6 @@ $(document).ready(function(){
         $("#voltar6").fadeToggle();
     });
     
-    
-    
-  
 });
     function confereNegativos(){
       var aux = document.getElementById('parcelas').value;
@@ -143,6 +141,8 @@ function fechaParcela() {
     $("#tipo_data").hide();
     $("#tipo_data_r").hide();
 }
+
+                                 
     
 
 //    function addContaPaga(id){     
@@ -337,10 +337,20 @@ function fechaParcela() {
                        <tr>
                            <td colspan="2"><span>Pagamento relacionado a obra:</span></td>
                             <td>
-                        <select name='obra' id='obra'>
+                            <select name='obra' id='obra'>
+                                <option value="0">Sem relação</option>
+                              <?php
+                                $ob = new Obra();
+                                $array = $ob->get_all_Obra();                               
+                                foreach ($array as $key => $value) {
+                                     echo "<option value=".$value->id.">".$value->nome."</option>";
+                                }                                
+                             ?>
+                        </select>
+<!--                        <select name='obra' id='obra'>
                            <option value='obrax'>Obra x</option> 
                             <option value='obray'>Obra y</option>
-                        </select>
+                        </select>-->
                             </td>
                        </tr>
                      
@@ -353,9 +363,8 @@ function fechaParcela() {
                                 $array = $plano_deconta->get_all_PlanoConta();
                                 foreach ($array as $key => $value) {
                                      echo "<option value=".$value->id.">".$value->nome."/".$value->codigo."</option>";
-                                }
-                                
-                            ?>
+                                }                                
+                             ?>
                         </select>
                             </td>
                        </tr>

@@ -5,6 +5,7 @@ include_once("../model/class_cliente.php");
 include_once("../model/class_conta_bd.php");
 include_once("../model/class_parcelas_bd.php");
 include_once("../includes/util.php");
+include_once("../model/class_obra.php");
 
 function confere($num,$id){
 $parcelas = new Parcelas();
@@ -15,6 +16,7 @@ $p = $parcelas->get_parcelas_pagas($id);
         }
     }
 }
+
 $id = "";
 $qtd_pagas = "" ;
 $data = "";
@@ -89,6 +91,13 @@ $nome_comprovante  = "";
     if(isset($_GET['tipo'])){
     ?> 
 <div id="visualizar-conta">
+    <script>
+    function ver_parc(id){
+        $("#parcelas"+id).fadeToggle();
+    }    
+       
+   
+    </script>
         <?php Functions::getPaginacao();?>
     
     
@@ -146,12 +155,6 @@ $nome_comprovante  = "";
                             $cli[1]= 'Sem Cliente';
                         }
                     }
-                    
-                                      
-                                         
-          
-                    
-                    
                    ?>
                     
           
@@ -187,29 +190,33 @@ $nome_comprovante  = "";
                                              <div class="item"><label>Banco: </label> <label><?php echo $value->banco ?></label></div>
                                         </div>
                                         <div class="col-5">
-                                             <div class="item"><label>Obra: </label> <label><?php echo $value->obra ?></label></div>
+                                                    <?php
+                                                    $obra = new Obra();
+                                                    if($value->obra == 0){
+                                                        $obra->nome = "Obra não foi relacionada !";
+                                                    }else{
+                                                    $obra = $obra->getObraId($value->obra);
+                                                    }
+                                                    ?>
+                                             <div class="item"><label>Obra: </label><label><?php echo $obra->nome; ?></label></div>
                                         </div>
                                          <div class="col-10">
                                              <div class="item"><textarea style="min-height: 60px; max-height: 150px; min-width:290px; max-width: 290px;" name="observacao" id="observacao" placeholder="Conta paga antecipada.. atrasada.. e informações gerais." ><?php echo $value->descricao ?></textarea></div>
                                          </div>
                                          
+                                         <input style="border-radius: 5px; cursor: pointer; border: 0; box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75); margin:10px; width: 150px; height: 30px;" type="button" onclick="ver_parc(<?php echo $value->id; ?>)" id="ver_parc" value="Parcelas">
+                                         
+                                     <div id="<?php echo "parcelas".$value->id; ?>" hidden="on">
                                          
                                         <?php 
                                         
                                         $parcelas = new Parcelas();
                                         $lista = array();
-                                        
-                                        
-//                                        $lista[] = $parcelas->get_parcelas($value->id
-//                                       
                                         $p = $parcelas->get_parcelas($value->id);
-                                        
-                                        
-                                        $color = "background-color: #cccccc";
-                                        $color2 = "background-color: #00ba65";
-                                        $j = 1;
+                                        $color = "background-color: #cccccc";   $color2 = "background-color: #00ba65"; $j = 1;
                                                 
                                         if($p != ""){
+                                         
                                             echo ' <div class="col-10">
                                              <div class="item"><label>Escolha um arquivo e envie para deixar a data paga: </label></div>
                                              </div>';
@@ -237,11 +244,11 @@ $nome_comprovante  = "";
                                                     </table>
                                               </form>
                                         </div>
-                                          
+                                   
                                          
                                                 <?php  $j++; }}  ?> 
                                        
-                                        
+                                           </div>    
                                          
 <!--                                         <div class="col-5">
                                              <div class="item"><label>Data de vencimento: </label> <label><?php ?></label></div>
