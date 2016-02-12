@@ -192,9 +192,6 @@ function fechaParcela() {
                 
                 
                 
-               
-                
-                
                 if($_POST['tipo'] == 1 ){
                     
                     

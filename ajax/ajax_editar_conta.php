@@ -104,7 +104,7 @@ $nome_comprovante  = "";
       <?php
                     if($_GET['tipo'] == 'apagar'){
                     $contas = new Contas();                    
-                    $conta = $contas->ver_contas_apagar(); 
+                    $conta = $contas->ver_contas_apagar();                     
                     empty($conta)? print "<div class='msg' id='visualizar-conta'>Nâo foi encontado nenhum resultado para sua pesquisa</div>" : '';
                     }
                     
@@ -131,7 +131,8 @@ $nome_comprovante  = "";
                     $i = 0;
                     ?>
                    
-                   <?php foreach ($conta as $key => $value) {
+                   <?php foreach ($conta as $key => $value)  {
+                    
                     if($value->status != 1){                       
                        $parcelas = new Parcelas();                      
                         $row = $parcelas->confere_kitacao($value->id);
@@ -256,7 +257,7 @@ $nome_comprovante  = "";
                                          
                                          
                                          
-                                         
+                                     
                                        
                                          
                                      </div>   
