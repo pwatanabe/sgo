@@ -7,6 +7,14 @@ include_once("../model/class_parcelas_bd.php");
 include_once("../model/class_plano_conta.php");
 include_once("../includes/util.php");
 
+function moeda($get_valor){    // função para desmembrar e guardar no banco
+
+$source = array('.', ',','R$');
+$replace = array('', '.','');
+
+$valor = str_replace($source, $replace, $get_valor); //remove os pontos e substitui a virgula pelo ponto
+return $valor; //retorna o valor formatado para gravar no banco
+}
 
 ?>
 <style>
@@ -215,7 +223,7 @@ function fechaParcela() {
                     }
                     
                     if($key == "select_fornecedor_cliente"){
-                    $fornecedor = $value;                       
+                        $fornecedor = $value;                       
                     }
                     
                     if($key == "banco"){
@@ -223,7 +231,7 @@ function fechaParcela() {
                     }
                     
                     if($key == "valor"){
-                    $valor = $value;
+                        echo $valor = moeda($value);
                     }
                     
                     if($key == "tipo_de_pagamento"){
@@ -522,9 +530,6 @@ function fechaParcela() {
                    
                    
  
-                   
-                   
-                   
                    
                </div> 
                

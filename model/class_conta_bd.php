@@ -124,7 +124,7 @@ function carregalista($result){
             $sql->conn_bd();
             $g = new Glob();
             
-            $query = "SELECT * FROM contas WHERE tipo = 2 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 0";
+            $query = "SELECT * FROM contas WHERE tipo_a_p_r = 2 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 0";
             
             $result = $g->tratar_query($query);
             
@@ -140,7 +140,7 @@ function carregalista($result){
             $sql->conn_bd();
             $g = new Glob();
             
-            $query = "SELECT * FROM contas WHERE tipo = 2 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 1";
+            $query = "SELECT * FROM contas WHERE tipo_a_p_r = 2 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 1";
             
             $result = $g->tratar_query($query);
             
@@ -156,7 +156,7 @@ function carregalista($result){
             $sql->conn_bd();
             $g = new Glob();
             
-            $query = "SELECT * FROM contas WHERE tipo = 1 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 1";
+            $query = "SELECT * FROM contas WHERE tipo_a_p_r = 1 && id_empresa = ".$_SESSION['id_empresa']." && oculto = 0 && status = 1";
             
             $result = $g->tratar_query($query);
             
@@ -171,9 +171,10 @@ function carregalista($result){
             $sql= new Sql();
             $sql->conn_bd();
             $g = new Glob();
-            $query = 'UPDATE contas SET status = 1 WHERE id = '.$id.' && id_empresa = '.$_SESSION['id_empresa'].'';
-            $result = $g->tratar_query($query);          
-           
+            $query = 'UPDATE contas SET status = 1 WHERE id = '.$id.' && id_empresa = '.$_SESSION['id_empresa'].';';
+            if(mysql_query($query)){          
+            return true;
+            }
          }
        
     }

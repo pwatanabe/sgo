@@ -21,14 +21,12 @@ $data = "";
 $parcela_n = "";
 $nome_comprovante  = "";
 
-print_r($_POST);
+
 
 
     if(isset($_FILES['arquivo']) && $_FILES['arquivo']['name'] != '' ){
-         $nome_comprovante = $_FILES['arquivo']['name'];
+        $nome_comprovante = $_FILES['arquivo']['name'];
         
-      
-       
           $id = $_POST['id'];
           if(isset($_FILES['arquivo'])){
                         $uploaddir = "../images/".$_SESSION['id_empresa']."/comprovantes/".$id."/";
@@ -38,16 +36,20 @@ print_r($_POST);
                                  
                                 mkdir($uploaddir);
                                 }
-                        if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $uploadfile)) {
-                                    echo "Arquivo válido e enviado com sucesso.\n";                                
+                        if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $uploadfile)){
+                                    echo "Arquivo válido e enviado com sucesso.\n";  
+                                    echo '<script>window.location = "../administrator/add_contas"</script>'; 
                          }
-                   }
+                                    
+                         
+                   }                   
              }
-    
+
     if(isset($_POST['enviacomprovante'])){
-    
+      
         $parcelas = new Parcelas();        
         $parcelas->updateComprovante($_POST['id'],$_POST['parcela_n'],$nome_comprovante);
+        echo '<script>window.location = "../administrator/add_contas"</script>';
    
     }  
 
@@ -72,10 +74,10 @@ print_r($_POST);
                  }   
                         
                          $parcelas = new Parcelas(); 
-                         $parcelas->add_parcelas($id_conta, $data, $parcela_n, $nome_comprovante); 
-                         if($parcelas->add_parcelas_bd()){
-                             $contas = new Contas();
-                         }
+                         $parcelas->add_parcelas($id_conta, $data, $parcela_n, $nome_comprovante);
+                                                   
+                         $parcelas->add_parcelas_bd();
+                           
                          echo '<script>window.location = "../administrator/add_contas"</script>';  
 
  }
@@ -120,15 +122,41 @@ print_r($_POST);
                     $i = 0;
                     ?>
                    
-                   <?php foreach ($conta as $key => $value) { 
+                   <?php foreach ($conta as $key => $value) {
+                    if($value->status != 1){                       
+                       $parcelas = new Parcelas();                      
+                        $row = $parcelas->confere_kitacao($value->id);
+                         if($row == 0){
+                                $conta = new Contas();
+                                $conta->set_conta_paga($value->id);                              
+                         continue;
+                         } 
+                     }
+                     
+                     
                     $i++;                 
                     $clis = new Cliente();
                     $cli = $clis->get_all_cli_by_id($value->fornecedor_cliente);
-                    if($cli[1]== ""){
-                        $cli[1]= 'Fornecedor não cadastrado';
+                    if($value->tipo_a_p_r == 1){
+                            if($cli[1]== ""){
+                            $cli[1]= 'Sem Fornecedor';
+                        }
+                    }else{
+                            if($cli[1]== ""){
+                            $cli[1]= 'Sem Cliente';
+                        }
                     }
                     
+                                      
+                                         
+          
+                    
+                    
                    ?>
+                    
+          
+                
+    
                     
                     <div id="contas" class="tabela-contas-apagar" style="<?php  if($i % 2 == 1){echo $style1;}else{ echo $style2;} ?> ">                               
                         <div  id="<?php echo $i ?>" >                             
@@ -138,11 +166,14 @@ print_r($_POST);
                                          <div class="col-5">
                                              <div class="item"><label>Cod: </label><label><?php echo $value->codigo  ?></label></div>
                                          </div>
-                                         <div class="col-5">
-                                             <div class="item"><label>Fornecedor: </label> <label><?php echo $cli[1]; ?></label></div>
+                                         <div class="col-5"><div class="item">
+                                            <?php if($value->tipo_a_p_r == 1){ echo "<label>Fornecedor: </label> "; }else{ echo "<label>Cliente: </label>"; } ?>
+                                                 
+                                            <label><?php echo $cli[1]; ?></label></div>
+                                             
                                          </div>
                                          <div class="col-5">
-                                             <div class="item"><label>Valor: </label> <label><?php echo'R$ ' . number_format($value->valor, 2, ',', '.') ?></label> </div>
+                                             <div class="item"><label>Valor: </label> <label><?php echo 'R$ '.number_format($value->valor, 2, ',', '.') ?></label> </div>
                                          </div>     
                                           <div class="col-3">
                                              <div class="item"><label>Juros: </label> <label><?php echo $value->juros.'('.$value->periodo_juros.')'; ?></label> </div>
@@ -158,7 +189,9 @@ print_r($_POST);
                                         <div class="col-5">
                                              <div class="item"><label>Obra: </label> <label><?php echo $value->obra ?></label></div>
                                         </div>
-                                        
+                                         <div class="col-10">
+                                             <div class="item"><textarea style="min-height: 60px; max-height: 150px; min-width:290px; max-width: 290px;" name="observacao" id="observacao" placeholder="Conta paga antecipada.. atrasada.. e informações gerais." ><?php echo $value->descricao ?></textarea></div>
+                                         </div>
                                          
                                          
                                         <?php 
@@ -166,29 +199,44 @@ print_r($_POST);
                                         $parcelas = new Parcelas();
                                         $lista = array();
                                         
-                                        $lista[] = $parcelas->get_parcelas($value->id);
-                                        $color = "#cccccc";
                                         
+//                                        $lista[] = $parcelas->get_parcelas($value->id
+//                                       
+                                        $p = $parcelas->get_parcelas($value->id);
+                                        
+                                        
+                                        $color = "background-color: #cccccc";
+                                        $color2 = "background-color: #00ba65";
                                         $j = 1;
-                                        if($lista[0][1] != ""){
+                                                
+                                        if($p != ""){
                                             echo ' <div class="col-10">
                                              <div class="item"><label>Escolha um arquivo e envie para deixar a data paga: </label></div>
                                              </div>';
-                                            foreach ($lista[0][1] as $key => $data) {                                           
+                                        foreach ($p as $key => $parc) {
+                                        
                                                 ?>
-                                         <div class="col-4" style="<?php echo "background-color:".$color.""; ?>; padding: 5px; border:solid 1px;">
-                                                <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >        
-                                                     <table style="cursor: pointer; margin: 10px;">
+                                        <div class="col-4" style="<?php if($parc['status']== 0){  echo $color;}else{echo $color2;} ?>; margin: 10px; padding: 5px; border:solid 1px;">
+                                             <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >        
+                                                     <table style="margin: 10px;">
                                                            <input type="hidden" name="enviacomprovante">
                                                            <input type="hidden" name="id" value="<?php echo $value->id; ?>">
-                                                        <tr><td><label>Parcela: </label></td><td><input style="background-color: #cccccc; border: 0; " name="parcela_n" type="text" readonly value="<?php echo $j; ?>"></td></tr>
-                                                        <tr><td><label>Data: </label></td><td><input style="background-color: #cccccc; border: 0; " name="data" readonly type="text" value="<?php echo data_padrao_brasileiro($data); ?>"></td><tr>
-                                                        <tr><td><label>Comprovante: </label></td><td><input type="file" name="arquivo" id='arquivo'></td></tr>
-                                                        <tr><td><label>Observação</label></td><td><textarea style="min-height: 60px; max-height: 150px; min-width:290px; max-width: 290px;" name="observacao" id="observacao" placeholder="Conta paga antecipada.. atrasada.. e informações gerais." ></textarea></td></tr>
-                                                        <tr><td><input type="submit" class="button" id="salvar" value="Pagar"></td></tr>                                                        
+                                                        <tr><td><label>Parcela: </label></td><td><input style="background-color: #cccccc; border: 0; " name="parcela_n" type="text" readonly value="<?php echo $parc['parcela_n']; ?>"></td></tr>
+                                                        <tr><td><label>Data: </label></td><td><input style="background-color: #cccccc; border: 0; " name="data" readonly type="text" value="<?php echo data_padrao_brasileiro($parc['data']); ?>"></td><tr>
+                                                        
+                                                        
+                                                        <tr><td><label>Comprovante: </label></td><td><input type="file" name="arquivo" id='arquivo'></td></tr>                                                        
+                                                       <?php if($parc['comprovante'] != ""){ ?>
+                                                        <tr><td><input type="button" value="Ver Comprovante" id="1" onclick="visualizaComprovante('<?php echo $value->id.":".$parc['comprovante'].":".$_SESSION['id_empresa']; ?>')"></td>          
+                                                        <?php }?>                                                            
+                                                        <?php if($parc['status'] !=  1){ ?>
+                                                        <tr><td><input type="submit" id="salvar" value="Pagar"></td></tr>
+                                                        <?php }else { ?>
+                                                        <td><input type="submit" id="att" value="Atualizar"></td></tr>
+                                                        <?php }?>
                                                     </table>
-                                                </form>
-                                            </div>
+                                              </form>
+                                        </div>
                                           
                                          
                                                 <?php  $j++; }}  ?> 
@@ -202,359 +250,11 @@ print_r($_POST);
                                          
                                          
                                          
-                                         
-                                         
-                                        
-                                         
-                                        <?php
-                                        if(isset($value->status) && $value->status == 1 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 1){ ?> 
-                                         <div class="row">
-                                             <div class="col-10">
-                                                 <div class="item">
-                                                     <div class="col-2">Parcelas: </div>
-                                                         <div class="col-8">    
-                                                            <?php                                                                        
-                                                                $parcelas = new Parcelas();
-                                                                $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                    for($index = 1; $index <= $value->parcelas; $index++){
-                                                                        $num = confere($index, $value->id);                                                                       
-                                                                        if($num == $index){
-                                                                           $nome = $c = $parcelas->get_comprovante($value->id, $num);
-                                                                           $envia = $value->id.':'.$nome.':'.$_SESSION['id_empresa'];
-                                                                           ?>
-                                                                <?php if($nome!=""){ ?>                                                                  
-                                                                  <input type="button" id="1" value="<?php echo $index ?>" onclick="visualizaComprovante('<?php echo $envia; ?>')">
-                                                                <?php } ?>
-                                                                <?php if($nome==""){ ?>                                                                  
-                                                                  <input type="button" style="background-color: red;" id="1" value="<?php echo $index ?>" onclick="abreEnvio()">
-                                                                    <div hidden style="height: 150px; width: 500px" id="abreenvio">
-                                                                      <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                                                          <input type="hidden" name="enviacomprovante">
-                                                                          <input type="hidden" name="id" value="<?php echo $value->id; ?>">
-                                                                          <input type="hidden" name="parcela" value="<?php echo $index; ?>">
-                                                                            <div class="col-5">
-                                                                                <div class="item">
-                                                                                    <label>Data do pagamento: </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <div class="item">
-                                                                                    <input type="date" name='data' id="data">
-                                                                                </div>
-                                                                            </div>
-                                                                           <div class="col-10">
-                                                                                <div class="item"><label>Enviar Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>                                                                                
-                                                                            </div>
-                                                                          <div class="col-10">
-                                                                                <div class="item">
-                                                                                    <input type="submit" class="button" id="salvar" value="Enviar">
-                                                                                </div>
-                                                                            </div>
-                                                                      </form>
-                                                                  
-                                                                  </div>
-                                                            
-                                                                <?php } ?>                                                             
-                                                                        
-                                                                           <?php                                                                           
-                                                                        }
-                                                                        
-                                                                    }
-       //                                                                   
-                                                            ?> 
-                                                        </div>
-                                                        <div class="col-10">
-                                                            <label>Clique para visualizar o comprovante...</label>
-                                                        </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                         
-                                         
-                                         
-                                         
-                                         
-                                         
-
-                                        <?php } if(isset($value->status) && $value->status == 1 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 2){?> 
-                                                                           <div class="row">
-                                             <div class="col-10">
-                                                 <div class="item">
-                                                     <div class="col-2">Parcelas: </div>
-                                                         <div class="col-8">    
-                                                            <?php                                                                        
-                                                                $parcelas = new Parcelas();
-                                                                $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                    for($index = 1; $index <= $value->parcelas; $index++){
-                                                                        $num = confere($index, $value->id);                                                                       
-                                                                        if($num == $index){
-                                                                           $nome = $c = $parcelas->get_comprovante($value->id, $num);
-                                                                           $envia = $value->id.':'.$nome.':'.$_SESSION['id_empresa'];
-                                                                           ?>
-                                                                <?php if($nome!=""){ ?>                                                                  
-                                                                  <input type="button" id="1" value="<?php echo $index ?>" onclick="visualizaComprovante('<?php echo $envia; ?>')">
-                                                                <?php } ?>
-                                                                <?php if($nome==""){ ?>                                                                  
-                                                                  <input type="button" style="background-color: red;" id="1" value="<?php echo $index ?>" onclick="abreEnvio()">
-                                                                    <div hidden style="height: 150px; width: 500px" id="abreenvio">
-                                                                      <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                                                          <input type="hidden" name="enviacomprovante">
-                                                                          <input type="hidden" name="id" value="<?php echo $value->id; ?>">
-                                                                          <input type="hidden" name="parcela" value="<?php echo $index; ?>">
-                                                                            <div class="col-5">
-                                                                                <div class="item">
-                                                                                    <label>Data do pagamento: </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <div class="item">
-                                                                                    <input type="date" name='data' id="data">
-                                                                                </div>
-                                                                            </div>
-                                                                           <div class="col-10">
-                                                                                <div class="item"><label>Enviar Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>                                                                                
-                                                                            </div>
-                                                                          <div class="col-10">
-                                                                                <div class="item">
-                                                                                    <input type="submit" class="button" id="salvar" value="Enviar">
-                                                                                </div>
-                                                                            </div>
-                                                                      </form>
-                                                                  
-                                                                  </div>
-                                                            
-                                                                <?php } ?>                                                             
-                                                                        
-                                                                           <?php                                                                           
-                                                                        }
-                                                                        
-                                                                    }
-       //                                                                   
-                                                            ?> 
-                                                        </div>
-                                                        <div class="col-10">
-                                                            <label>Clique para visualizar o comprovante...</label>
-                                                        </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                                        
-                                        <?php } ?>   
-                                         <div class="col-5">
-                                            <div class="item"><label>Parcelas: <?php echo $value->parcelas ?></label></div>
-                                        </div> 
                                        
-                                                        
-                                        <div class="col-10">
-                                            <div class="item"><label>Descrição: </label></div>
-                                        </div>  
-                                        <div class="col-10">
-                                            <div class="item"><textarea style="position:relative; z-index: 200;" row="2" cols="50"> <?php echo $value->descricao ?> </textarea></div>
-                                        </div>
-                                     </div>
-                                 </div>
-                                        <?php
-                                        if(isset($value->status) && $value->status == 0 && isset($value->tipo_a_p_r) && $value->tipo_a_p_r == 1){?>
-                                        <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                            <input type="hidden" name="parcela" id="parcela" value="parcela">
-                                            <input type="hidden" name="id" id="id" value="<?php echo $value->id; ?>">
                                          
-                                            <div class="row">                                                 
-                                                <div style="margin-left: 0px; padding-top: 10px; padding-left: 20px; background-color: rgba(50,200,50,0.6);" class="center">   
-                                                    
-                                                     <div class="col-10"><div class="item"><label>Adicionar à contas pagas</label></div></div>
-                                                <div class="row"> 
-                                                    <div  class="row">
-                                                     <div><div class="item"><label>Data do pagamento:</label> <input type="date" name='data' id="data"></div></div>
-                                                        <div class="col-2" style="width: 15%;">                                                     
-                                                            <div class="item"><label>Pagar parcela: </label>                                                    
-                                                                <select id="parcela_n" name="parcela_n">       
-                                                                             <?php                                                                        
-                                                                        $parcelas = new Parcelas();
-                                                                        $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                        for($index = 1; $index <= $value->parcelas; $index++){
-                                                                            $num = confere($index, $value->id);
-                                                                            if($num != $index){
-                                                                                echo '<option value='.$index.'>'.$index.'</option>';
-                                                                            }
-                                                                        }
-//                                                                   
-                                                                        ?> 
-                                                                </select> 
-                                                            </div>
+                                     </div>   
+                               </div>          
                                                             
-                                                        </div> 
-                                                      
-                                                     <div class="col-5">
-                                                         <div class="item"><label>Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>
-                                                     </div>
-                                                     </div>
-                                                     <div class="col-10"><div class="row"><div  class="col-2"><label>Parcelas pagas: </label></div>
-                                                 
-                                                        <div class="col-8">    
-                                                            <?php                                                                        
-                                                                $parcelas = new Parcelas();
-                                                                $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                    for($index = 1; $index <= $value->parcelas; $index++){
-                                                                        $num = confere($index, $value->id);                                                                       
-                                                                        if($num == $index){
-                                                                           $nome = $c = $parcelas->get_comprovante($value->id, $num);
-                                                                           $envia = $value->id.':'.$nome.':'.$_SESSION['id_empresa'];
-                                                                           ?>
-                                                                <?php if($nome!=""){ ?>                                                                  
-                                                                  <input type="button" id="1" value="<?php echo $index ?>" onclick="visualizaComprovante('<?php echo $envia; ?>')">
-                                                                <?php } ?>
-                                                                <?php if($nome==""){ ?>                                                                  
-                                                                  <input type="button" style="background-color: red;" id="1" value="<?php echo $index ?>" onclick="abreEnvio()">
-                                                                    <div hidden style="height: 150px; width: 500px" id="abreenvio">
-                                                                      <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                                                          <input type="hidden" name="enviacomprovante">
-                                                                          <input type="hidden" name="id" value="<?php echo $value->id; ?>">
-                                                                          <input type="hidden" name="parcela" value="<?php echo $index; ?>">
-                                                                            <div class="col-5">
-                                                                                <div class="item">
-                                                                                    <label>Data do pagamento: </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <div class="item">
-                                                                                    <input type="date" name='data' id="data">
-                                                                                </div>
-                                                                            </div>
-                                                                           <div class="col-10">
-                                                                                <div class="item"><label>Enviar Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>                                                                                
-                                                                            </div>
-                                                                          <div class="col-10">
-                                                                                <div class="item">
-                                                                                    <input type="submit" class="button" id="salvar" value="Enviar">
-                                                                                </div>
-                                                                            </div>
-                                                                    
-                                                                  </div>
-                                                            
-                                                                <?php } ?>                                                             
-                                                                        
-                                                                           <?php                                                                           
-                                                                        }
-                                                                        
-                                                                    }
-       //                                                                   
-                                                            ?> 
-                                                        </div>
-                                                    </div>
-                                                     </div>
-                                                     </div>
-                                                     <div class="row">
-                                                        <div class="col-10">
-                                                            <div class="item">
-                                                                <input type="submit" class="button" id="salvar" value="salvar">
-                                                            </div>
-                                                        </div>  
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <?php } if(isset($value->status) && $value->status == 0 && isset($value->tipo) && $value->tipo == 2){?>
-                                        <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                            <input type="hidden" name="parcela" id="parcela" value="parcela">
-                                            <input type="hidden" name="id" id="id" value="<?php echo $value->id; ?>">
-                                         
-                                            <div class="row">                                                 
-                                                <div style="margin-left: 0px; padding-top: 10px; padding-left: 20px; background-color: rgba(50,200,50,0.6);" class="center">   
-                                                    
-                                                     <div class="col-10"><div class="item"><label>Adicionar à contas recebidas</label></div></div>
-                                                <div class="row"> 
-                                                    <div  class="row">
-                                                     <div><div class="item"><label>Data do pagamento:</label> <input type="date" name='data' id="data"></div></div>
-                                                        <div class="col-2" style="width: 15%;">                                                     
-                                                            <div class="item"><label>Pagar parcela: </label>                                                    
-                                                                <select id="parcela_n" name="parcela_n">       
-                                                                             <?php                                                                        
-                                                                        $parcelas = new Parcelas();
-                                                                        $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                        for($index = 1; $index <= $value->parcelas; $index++){
-                                                                            $num = confere($index, $value->id);
-                                                                            if($num != $index){
-                                                                                echo '<option value='.$index.'>'.$index.'</option>';
-                                                                            }
-                                                                        }
-//                                                                   
-                                                                        ?> 
-                                                                </select> 
-                                                            </div>
-                                                            
-                                                        </div> 
-                                                      
-                                                     <div class="col-5">
-                                                         <div class="item"><label>Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>
-                                                     </div>
-                                                     </div>
-                                                     <div class="col-10"><div class="row"><div  class="col-2"><label>Parcelas pagas: </label></div>
-                                                 
-                                                        <div class="col-8">    
-                                                            <?php                                                                        
-                                                                $parcelas = new Parcelas();
-                                                                $p = $parcelas->get_parcelas_pagas($value->id);
-                                                                    for($index = 1; $index <= $value->parcelas; $index++){
-                                                                        $num = confere($index, $value->id);                                                                       
-                                                                        if($num == $index){
-                                                                           $nome = $c = $parcelas->get_comprovante($value->id, $num);
-                                                                           $envia = $value->id.':'.$nome.':'.$_SESSION['id_empresa'];
-                                                                           ?>
-                                                                <?php if($nome!=""){ ?>                                                                  
-                                                                  <input type="button" id="1" value="<?php echo $index ?>" onclick="visualizaComprovante('<?php echo $envia; ?>')">
-                                                                <?php } ?>
-                                                                <?php if($nome==""){ ?>                                                                  
-                                                                  <input type="button" style="background-color: red;" id="1" value="<?php echo $index ?>" onclick="abreEnvio()">
-                                                                    <div hidden style="height: 150px; width: 500px" id="abreenvio">
-                                                                      <form action="../ajax/ajax_editar_conta.php" method='POST' enctype="multipart/form-data" >
-                                                                          <input type="hidden" name="enviacomprovante">
-                                                                          <input type="hidden" name="id" value="<?php echo $value->id; ?>">
-                                                                          <input type="hidden" name="parcela" value="<?php echo $index; ?>">
-                                                                            <div class="col-5">
-                                                                                <div class="item">
-                                                                                    <label>Data do pagamento: </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <div class="item">
-                                                                                    <input type="date" name='data' id="data">
-                                                                                </div>
-                                                                            </div>
-                                                                           <div class="col-10">
-                                                                                <div class="item"><label>Enviar Comprovante: </label><input type="file" name="arquivo" id='arquivo'></div>                                                                                
-                                                                            </div>
-                                                                          <div class="col-10">
-                                                                                <div class="item">
-                                                                                    <input type="submit" class="button" id="salvar" value="Enviar">
-                                                                                </div>
-                                                                            </div>
-                                                                    
-                                                                  </div>
-                                                            
-                                                                <?php } ?>                                                             
-                                                                        
-                                                                           <?php                                                                           
-                                                                        }
-                                                                        
-                                                                    }
-       //                                                                   
-                                                            ?> 
-                                                        </div>
-                                                    </div>
-                                                     </div>
-                                                     </div>
-                                                     <div class="row">
-                                                        <div class="col-10">
-                                                            <div class="item">
-                                                                <input type="submit" class="button" id="salvar" value="salvar">
-                                                            </div>
-                                                        </div>  
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                       <?php } ?>                                  
                             </div>                        
                         </div>
                    
