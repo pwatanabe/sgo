@@ -1,4 +1,3 @@
-
 <?php
 include("restrito.php");
 include("../model/class_cliente.php");
